@@ -13,6 +13,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTrpcTodoRouteImport } from './routes/demo/trpc-todo'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
+import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -43,6 +44,11 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
 const DemoTableRoute = DemoTableRouteImport.update({
   id: '/demo/table',
   path: '/demo/table',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
+  id: '/_public/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -102,6 +108,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
@@ -137,6 +145,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
@@ -156,6 +165,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/forgot-password'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/forgot-password'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   id:
     | '__root__'
+    | '/_public/forgot-password'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
@@ -208,6 +220,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/demo/table'
       fullPath: '/demo/table'
       preLoaderRoute: typeof DemoTableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/forgot-password': {
+      id: '/_public/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof PublicForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -336,6 +356,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,
