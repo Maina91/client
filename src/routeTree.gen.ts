@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTrpcTodoRouteImport } from './routes/demo/trpc-todo'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
@@ -25,8 +25,8 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/_public/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -102,10 +102,10 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
+  '/': typeof PublicIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -119,10 +119,10 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
+  '/': typeof PublicIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -137,10 +137,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
+  '/_public/': typeof PublicIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
@@ -156,10 +156,10 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
+    | '/'
     | '/api/trpc/$'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -173,10 +173,10 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
+    | '/'
     | '/api/trpc/$'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -190,10 +190,10 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   id:
     | '__root__'
-    | '/'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
+    | '/_public/'
     | '/api/trpc/$'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
@@ -208,10 +208,10 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
+  PublicIndexRoute: typeof PublicIndexRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
@@ -227,11 +227,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/trpc-todo': {
@@ -336,10 +336,10 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,
+  PublicIndexRoute: PublicIndexRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
