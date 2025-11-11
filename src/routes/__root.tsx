@@ -16,7 +16,10 @@ import type { QueryClient } from '@tanstack/react-query'
 
 import type { TRPCRouter } from '@/integrations/trpc/router'
 import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
+
 import { GlobalLoader } from '@/components/custom/GlobalLoader'
+import { Toaster } from '@/components/ui/sonner'
+
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -59,6 +62,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Header />
         <GlobalLoader />
         {children}
+        <Toaster position={'top-center'} richColors={true} />
         <TanStackDevtools
           config={{
             position: 'bottom-right',
