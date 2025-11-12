@@ -1,6 +1,6 @@
 import { useSession } from '@tanstack/react-start/server';
 import type { SessionData } from '@/features/auth/types/auth';
-import { NODE_ENV, SESSION_COOKIE_DOMAIN, SESSION_EXPIRY_SEC, SESSION_SECRET } from '@/lib/constants';
+import { NODE_ENV, SESSION_COOKIE_DOMAIN, SESSION_EXPIRY_SEC, SESSION_SECRET } from '@/lib/config';
 
 export const getAppSession = () => {
     return useSession<SessionData>({
