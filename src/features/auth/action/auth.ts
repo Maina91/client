@@ -3,7 +3,7 @@ import { loginUserService, logoutUserService, resetPasswordService, updatePasswo
 import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '../schema/auth.schema'
 import type { SessionUser } from '@/features/auth/types/auth';
 import { useAppSession } from '@/lib/session';
-import { SESSION_EXPIRY_SEC } from '@/lib/config';
+import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';
 
 
