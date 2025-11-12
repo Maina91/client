@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -32,6 +34,13 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const DashboardRouteImport = createFileRoute('/dashboard')()
+
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -194,6 +203,7 @@ export interface FileRoutesById {
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/__layout': typeof Dashboard_layoutRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/_auth/forgot-password'
     | '/_auth/reset-password'
     | '/_auth/verify-otp'
+    | '/dashboard'
     | '/dashboard/__layout'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -292,6 +303,7 @@ export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
@@ -311,6 +323,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -348,7 +367,7 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/__layout': {
       id: '/dashboard/__layout'
-      path: ''
+      path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof Dashboard_layoutRouteImport
       parentRoute: typeof DashboardRoute
@@ -468,10 +487,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  Dashboard_layoutRoute: typeof Dashboard_layoutRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
+  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  Dashboard_layoutRoute: Dashboard_layoutRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
+  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,

@@ -59,7 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
+        {/* <Header /> */}
         <GlobalLoader />
         {children}
         <Toaster position={'top-center'} richColors={true} />
