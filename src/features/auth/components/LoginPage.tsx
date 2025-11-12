@@ -1,3 +1,7 @@
+export function LoginPage() {
+
+}
+
 // import { useState } from 'react'
 // import { useRouter } from '@tanstack/react-router'
 // import { useMutation } from '@tanstack/react-query'
