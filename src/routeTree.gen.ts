@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -30,6 +32,13 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const DashboardRouteImport = createFileRoute('/dashboard')()
+
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -65,9 +74,9 @@ const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardMemberIndexRoute = DashboardMemberIndexRouteImport.update({
-  id: '/dashboard/member/',
-  path: '/dashboard/member/',
-  getParentRoute: () => rootRouteImport,
+  id: '/member/',
+  path: '/member/',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardEmployerIndexRoute = DashboardEmployerIndexRouteImport.update({
   id: '/employer/',
@@ -176,6 +185,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public/forgot-password': typeof PublicForgotPasswordRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/__layout': typeof Dashboard_layoutRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_public/forgot-password'
+    | '/dashboard'
     | '/dashboard/__layout'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
@@ -277,7 +289,6 @@ export interface RootRouteChildren {
   DemoFormSimpleRoute: typeof DemoFormSimpleRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
   DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
   DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
   DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
@@ -286,6 +297,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -323,7 +341,7 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/__layout': {
       id: '/dashboard/__layout'
-      path: ''
+      path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof Dashboard_layoutRouteImport
       parentRoute: typeof DashboardRoute
@@ -337,10 +355,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/member/': {
       id: '/dashboard/member/'
-      path: '/dashboard/member'
+      path: '/member'
       fullPath: '/dashboard/member'
       preLoaderRoute: typeof DashboardMemberIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/employer/': {
       id: '/dashboard/employer/'
@@ -429,8 +447,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  Dashboard_layoutRoute: typeof Dashboard_layoutRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
+  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  Dashboard_layoutRoute: Dashboard_layoutRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
+  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   PublicForgotPasswordRoute: PublicForgotPasswordRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,
@@ -442,7 +479,6 @@ const rootRouteChildren: RootRouteChildren = {
   DemoFormSimpleRoute: DemoFormSimpleRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
   DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
   DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
   DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,

@@ -43,7 +43,7 @@ export interface ResendOtpResponse {
 }
 
 export type SessionUser = {
-    member_no?: string
+    member_no: string | null
     email: string
     role: UserType
     custom_ref?: string
@@ -51,10 +51,11 @@ export type SessionUser = {
 
 export type SessionData = {
     is_authed: boolean
-    login_token: string | null
-    auth_token: string | null
     user: SessionUser | null
-    lastTouch?: number
-    expiresAt?: number
+    auth_token?: string
+    otp_token?: string;
     csrfToken?: string
+    lastTouch?: number
+    createdAt?: number
+    expiresAt?: number
 }

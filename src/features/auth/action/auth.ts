@@ -1,132 +1,180 @@
-import { createServerFn } from '@tanstack/react-start'
-import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '@/core/services/auth/auth.service'
-import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '@/core/validators/auth.schema'
-import { useAppSession } from '@/core/lib/session'
+// import { randomBytes } from 'node:crypto';
+// import { createServerFn } from '@tanstack/react-start'
+// import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '../service/authService'
+// import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '../schema/auth.schema'
+// import type { SessionUser } from '@/features/auth/types/auth';
+// import { useAppSession } from '@/lib/session';
+// import { SESSION_EXPIRY_SEC } from '@/lib/constants';
+// import { generateCsrfToken } from '@/lib/generateCsrf';
 
 
-export const loginAction = createServerFn({ method: 'POST' })
-    .inputValidator(loginSchema)
-    .handler(async ({ data }) => {
-        try {
-            const response = await loginUserService(data)
+// export const loginAction = createServerFn({ method: 'POST' })
+//     .inputValidator(loginSchema)
+//     .handler(async ({ data }) => {
+//         try {
+//             const response = await loginUserService(data)
+//             if (!response.token) {
+//                 throw new Error("An error occurred")
+//             }
 
-            if (!response.token) {
-                throw new Error("An error occurred")
-            }
+//             const session = await useAppSession();
+//             await session.clear()
 
-            const session = await useAppSession()
-            await session.update({
-                is_authed: false,
-                login_token: response.token,
-                user: {
-                    email: data.email_address,
-                    role: data.user_type
-                },
-            })
+//             const now = Date.now()
+//             const csrf = generateCsrfToken()
+//             const user: SessionUser = {
+//                 member_no: null,
+//                 email: data.email_address,
+//                 role: data.user_type,
+//             };
 
-            return {
-                success: true,
-                message: response.message,
-                otp_generated: response.otp_generated,
-                member_status: response.member_status,
-            }
-        } catch (err: any) {
-            throw {
-                message: err?.message ?? 'Login failed',
-                fieldErrors: err?.fieldErrors ?? null,
-            }
-        }
-    })
+//             await session.update({
+//                 is_authed: true,
+//                 user: user,
+//                 lastTouch: now,
+//                 createdAt: now,  
+//                 expiresAt: now + SESSION_EXPIRY_SEC * 1000,
+//                 csrfToken: csrf, 
+//             });
 
-export const logoutAction = createServerFn({ method: 'POST' })
-    .handler(async () => {
-        try {
-            const session = await useAppSession()
-            const auth_token = session.data.auth_token
+//             return {
+//                 success: true,
+//                 message: response.message,
+//                 otp_generated: response.otp_generated,
+//                 member_status: response.member_status,
+//             }
+//         } catch (err: any) {
+//             throw {
+//                 message: err?.message ?? 'Login failed',
+//                 fieldErrors: err?.fieldErrors ?? null,
+//             }
+//         }
+//     })
 
-            if (!auth_token) {
-                throw new Error('No active session')
-            }
+// export const logoutAction = createServerFn({ method: 'POST' })
+//     .handler(async () => {
+//         try {
+//             const session = await useAppSession()
+//             const auth_token = session.data.auth_token
 
-            const res = await logoutUserService(auth_token)
-            await session.clear()
+//             if (!auth_token) {
+//                 throw new Error('No active session')
+//             }
 
-            return {
-                success: true,
-                message: res.message
-            }
-        } catch (err: any) {
-            const session = await useAppSession()
-            await session.clear()
+//             const res = await logoutUserService(auth_token)
+//             await session.clear()
 
-            throw {
-                message: err?.message ?? 'Logged out successfully',
-            }
-        }
-    })
+//             return {
+//                 success: true,
+//                 message: res.message
+//             }
+//         } catch (err: any) {
+//             const session = await useAppSession()
+//             await session.clear()
 
-export const resetPassword = createServerFn({ method: 'POST' })
-    .inputValidator(resetPasswordSchema)
-    .handler(async ({ data }) => {
-        try {
-            const res = await resetPasswordService(data)
+//             throw {
+//                 message: err?.message ?? 'Logged out successfully',
+//             }
+//         }
+//     })
 
-            if (res.status_code !== 200) {
-                throw new Error(res.message || 'Unable to reset password')
-            }
+// export const verifySessionAction = createServerFn({ method: 'GET' })
+//     .handler(async () => {
+//         const session = await useAppSession();
+//         const data = await session.data;
 
-            const session = await useAppSession()
-            await session.update({
-                is_authed: false,
-                login_token: res.member_token,
-                user: {
-                    email: data.email,
-                    role: "CUSTOMER",
-                    custom_ref: res.customer_ref,
-                },
-            })
+//         if (!data.is_authed) return { authenticated: false };
 
-            return {
-                success: true,
-                message: res.message,
-                member_status: res.member_status,
-            }
+//         const now = Date.now();
 
-        } catch (err: any) {
-            throw {
-                message: err?.message ?? 'Reset password failed',
-                fieldErrors: err?.fieldErrors ?? null,
-            }
-        }
-    })
+//         // Idle timeout
+//         if (data.expiresAt && data.expiresAt < now) {
+//             await session.clear();
+//             return { authenticated: false };
+//         }
 
-export const updatePassword = createServerFn({ method: 'POST' })
-    .inputValidator(updatePasswordSchema)
-    .handler(async ({ data }) => {
-        try {
-            const session = await useAppSession()
-            const login_token = session.data.login_token
+//         // Absolute max lifetime (14 days)
+//         const ABSOLUTE_MAX = 14 * 24 * 60 * 60 * 1000;
+//         if (data.createdAt && now - data.createdAt > ABSOLUTE_MAX) {
+//             await session.clear();
+//             return { authenticated: false };
+//         }
 
-            if (!login_token) {
-                throw new Error('OTP session expired or invalid')
-            }
+//         // Sliding window extend
+//         const SLIDING_WINDOW = 30 * 60 * 1000;
+//         if (now - (data.lastTouch ?? 0) > SLIDING_WINDOW) {
+//             await session.update({
+//                 lastTouch: now,
+//                 expiresAt: now + (SESSION_EXPIRY_SEC * 1000),
+//             });
+//         }
 
-            const res = await updatePasswordService(login_token, data)
+//         return { authenticated: true, user: data.user };
+//     });
 
-            if (res.status_code !== 200) {
-                throw new Error(res.message || 'Unable to reset password')
-            }
 
-            await session.clear()
+// export const resetPassword = createServerFn({ method: 'POST' })
+//     .inputValidator(resetPasswordSchema)
+//     .handler(async ({ data }) => {
+//         try {
+//             const res = await resetPasswordService(data)
 
-            return {
-                success: true,
-                message: res.message,
-            }
-        } catch (err: any) {
-            throw {
-                message: err?.message ?? 'Reset password failed',
-                fieldErrors: err?.fieldErrors ?? null,
-            }
-        }
-    })
+//             if (res.status_code !== 200) {
+//                 throw new Error(res.message || 'Unable to reset password')
+//             }
+
+//             const session = await useAppSession()
+//             await session.update({
+//                 is_authed: false,
+//                 // login_token: res.member_token,
+//                 user: {
+//                     email: data.email,
+//                     role: "member",
+//                     custom_ref: res.customer_ref,
+//                 },
+//             })
+
+//             return {
+//                 success: true,
+//                 message: res.message,
+//                 member_status: res.member_status,
+//             }
+
+//         } catch (err: any) {
+//             throw {
+//                 message: err?.message ?? 'Reset password failed',
+//                 fieldErrors: err?.fieldErrors ?? null,
+//             }
+//         }
+//     })
+
+// export const updatePassword = createServerFn({ method: 'POST' })
+//     .inputValidator(updatePasswordSchema)
+//     .handler(async ({ data }) => {
+//         try {
+//             const session = await useAppSession()
+//             const login_token = session.data.login_token
+
+//             if (!login_token) {
+//                 throw new Error('OTP session expired or invalid')
+//             }
+
+//             const res = await updatePasswordService(login_token, data)
+
+//             if (res.status_code !== 200) {
+//                 throw new Error(res.message || 'Unable to reset password')
+//             }
+
+//             await session.clear()
+
+//             return {
+//                 success: true,
+//                 message: res.message,
+//             }
+//         } catch (err: any) {
+//             throw {
+//                 message: err?.message ?? 'Reset password failed',
+//                 fieldErrors: err?.fieldErrors ?? null,
+//             }
+//         }
+//     })
