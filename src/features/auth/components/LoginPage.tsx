@@ -4,9 +4,9 @@ import { useMutation } from '@tanstack/react-query'
 import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
-import { USER_TYPE, loginSchema } from '../schema/auth.schema'
+import { loginSchema } from '../schema/auth.schema'
 import { loginAction } from '../action/auth'
-import type { LoginData } from '../schema/auth.schema'
+import type { LoginData, UserType } from '../schema/auth.schema'
 import { Spinner } from "@/components/ui/spinner"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -58,7 +58,7 @@ export function LoginPage() {
         defaultValues: {
             email_address: '',
             password: '',
-            user_type: USER_TYPE,
+            user_type: 'MEMBER' as UserType,
         },
         validators: {
             onSubmit: loginSchema,
