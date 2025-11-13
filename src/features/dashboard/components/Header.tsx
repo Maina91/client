@@ -4,11 +4,11 @@ import { useRouter } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { toast } from 'sonner';
+import type { UserType } from '@/features/auth/schema/auth.schema';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useCustomerProfile } from '@/core/hooks/customer/use-profile';
+import { useCustomerProfile } from '@/features/member/hooks/useProfile';
 import { logoutAction } from '@/features/auth/action/auth';
-import type { UserType } from '@/features/auth/schema/auth.schema';
 
 interface TopbarProps {
     onSidebarToggle?: () => void;
@@ -21,7 +21,9 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
     const { data: profile, isLoading, isError } = useCustomerProfile();
 
     const logoutMutation = useMutation({
-        mutationFn: logoutAction,
+        mutationFn: async () => {
+            return logoutAction()
+        },
         onSuccess: (res) => {
             toast.success(res.message ?? 'Logged out successfully');
             localStorage.clear(); // or use your session clear util
