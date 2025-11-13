@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -36,6 +38,13 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const DashboardRouteImport = createFileRoute('/dashboard')()
+
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -62,9 +71,9 @@ const DemoTableRoute = DemoTableRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/dashboard/profile',
-  path: '/dashboard/profile',
-  getParentRoute: () => rootRouteImport,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
   id: '/_layout',
@@ -127,20 +136,20 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
 } as any)
 const DashboardMemberContributionsRoute =
   DashboardMemberContributionsRouteImport.update({
-    id: '/dashboard/member/contributions',
-    path: '/dashboard/member/contributions',
-    getParentRoute: () => rootRouteImport,
+    id: '/member/contributions',
+    path: '/member/contributions',
+    getParentRoute: () => DashboardRoute,
   } as any)
 const DashboardMemberAccountsRoute = DashboardMemberAccountsRouteImport.update({
-  id: '/dashboard/member/accounts',
-  path: '/dashboard/member/accounts',
-  getParentRoute: () => rootRouteImport,
+  id: '/member/accounts',
+  path: '/member/accounts',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardEmployerEmployeesRoute =
   DashboardEmployerEmployeesRouteImport.update({
-    id: '/dashboard/employer/employees',
-    path: '/dashboard/employer/employees',
-    getParentRoute: () => rootRouteImport,
+    id: '/employer/employees',
+    path: '/employer/employees',
+    getParentRoute: () => DashboardRoute,
   } as any)
 const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
   id: '/api/trpc/$',
@@ -228,6 +237,7 @@ export interface FileRoutesById {
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_layout': typeof DashboardLayoutRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/table': typeof DemoTableRoute
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/_auth/forgot-password'
     | '/_auth/reset-password'
     | '/_auth/verify-otp'
+    | '/dashboard'
     | '/dashboard/_layout'
     | '/dashboard/profile'
     | '/demo/table'
@@ -342,15 +353,12 @@ export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
   PublicIndexRoute: typeof PublicIndexRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
-  DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
-  DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
-  DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
@@ -365,6 +373,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -402,14 +417,14 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/profile': {
       id: '/dashboard/profile'
-      path: '/dashboard/profile'
+      path: '/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/_layout': {
       id: '/dashboard/_layout'
-      path: ''
+      path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
@@ -493,24 +508,24 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/member/contributions': {
       id: '/dashboard/member/contributions'
-      path: '/dashboard/member/contributions'
+      path: '/member/contributions'
       fullPath: '/dashboard/member/contributions'
       preLoaderRoute: typeof DashboardMemberContributionsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/member/accounts': {
       id: '/dashboard/member/accounts'
-      path: '/dashboard/member/accounts'
+      path: '/member/accounts'
       fullPath: '/dashboard/member/accounts'
       preLoaderRoute: typeof DashboardMemberAccountsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/employer/employees': {
       id: '/dashboard/employer/employees'
-      path: '/dashboard/employer/employees'
+      path: '/employer/employees'
       fullPath: '/dashboard/employer/employees'
       preLoaderRoute: typeof DashboardEmployerEmployeesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/api/trpc/$': {
       id: '/api/trpc/$'
@@ -550,19 +565,42 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardLayoutRoute: typeof DashboardLayoutRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
+  DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
+  DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
+  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
+  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLayoutRoute: DashboardLayoutRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
+  DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
+  DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
+  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
+  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
-  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,
   PublicIndexRoute: PublicIndexRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
-  DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
-  DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
-  DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,

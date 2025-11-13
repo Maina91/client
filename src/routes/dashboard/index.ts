@@ -6,10 +6,3 @@ export const Route = createFileRoute('/dashboard/')({
 
 function RouteComponent() {
 }
-
-
-// const res = await verifySessionAction()
-// if (!res.authenticated) {
-//   return { redirect: '/' } // or throw redirect
-// }
-// return null

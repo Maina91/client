@@ -114,6 +114,26 @@ export const getUSerSession = createServerFn({ method: 'GET' }).handler(
     }
 );
 
+export const clearUserSession = createServerFn({ method: 'POST' }).handler(
+    async () => {
+        try {
+            const session = await useAppSession();
+            await session.clear();
+
+            return {
+                success: true,
+                message: 'Session cleared successfully',
+            };
+        } catch (err: any) {
+            console.error('Failed to clear session', err);
+            return {
+                success: false,
+                message: err?.message || 'Failed to clear session',
+            };
+        }
+    }
+);
+
 
 export const resetPassword = createServerFn({ method: 'POST' })
     .inputValidator(resetPasswordSchema)
