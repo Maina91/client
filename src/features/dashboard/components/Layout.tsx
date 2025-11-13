@@ -11,7 +11,7 @@ export function DashboardLayout() {
     const navigate = useNavigate();
 
     if (!isLoading && !isAuthed) {
-        navigate({ to: '/' });
+        navigate({ to: '/login' });
         return null;
     }
 

@@ -10,7 +10,7 @@ export const Route = createFileRoute('/dashboard/_layout')({
     if (!res.authenticated || !res.user?.role) {
       await clearUserSession();
       throw redirect({
-        to: '/',
+        to: '/login',
         search: { redirect: location.href },
       });
     }

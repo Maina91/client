@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -19,6 +17,7 @@ import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as DashboardMemberIndexRouteImport } from './routes/dashboard/member/index'
 import { Route as DashboardEmployerIndexRouteImport } from './routes/dashboard/employer/index'
@@ -39,13 +38,6 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -83,6 +75,11 @@ const AuthVerifyOtpRoute = AuthVerifyOtpRouteImport.update({
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/_auth/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/_auth/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
@@ -131,9 +128,9 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardMemberProfileRoute = DashboardMemberProfileRouteImport.update({
-  id: '/member/profile',
-  path: '/member/profile',
-  getParentRoute: () => DashboardRoute,
+  id: '/dashboard/member/profile',
+  path: '/dashboard/member/profile',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardMemberContributionsRoute =
   DashboardMemberContributionsRouteImport.update({
@@ -148,9 +145,9 @@ const DashboardMemberAccountsRoute = DashboardMemberAccountsRouteImport.update({
 } as any)
 const DashboardEmployerProfileRoute =
   DashboardEmployerProfileRouteImport.update({
-    id: '/employer/profile',
-    path: '/employer/profile',
-    getParentRoute: () => DashboardRoute,
+    id: '/dashboard/employer/profile',
+    path: '/dashboard/employer/profile',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const DashboardEmployerEmployeesRoute =
   DashboardEmployerEmployeesRouteImport.update({
@@ -186,6 +183,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardLayoutRoute
@@ -215,6 +213,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -244,9 +243,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/login': typeof AuthLoginRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_layout': typeof DashboardLayoutRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -276,6 +275,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/forgot-password'
+    | '/login'
     | '/reset-password'
     | '/verify-otp'
     | '/dashboard'
@@ -305,6 +305,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
+    | '/login'
     | '/reset-password'
     | '/verify-otp'
     | '/dashboard'
@@ -333,9 +334,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth/forgot-password'
+    | '/_auth/login'
     | '/_auth/reset-password'
     | '/_auth/verify-otp'
-    | '/dashboard'
     | '/dashboard/_layout'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -364,14 +365,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
   PublicIndexRoute: typeof PublicIndexRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
+  DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
+  DashboardMemberProfileRoute: typeof DashboardMemberProfileRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
@@ -386,13 +389,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -430,7 +426,7 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/_layout': {
       id: '/dashboard/_layout'
-      path: '/dashboard'
+      path: ''
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
@@ -447,6 +443,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/forgot-password': {
@@ -514,10 +517,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/member/profile': {
       id: '/dashboard/member/profile'
-      path: '/member/profile'
+      path: '/dashboard/member/profile'
       fullPath: '/dashboard/member/profile'
       preLoaderRoute: typeof DashboardMemberProfileRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/member/contributions': {
       id: '/dashboard/member/contributions'
@@ -535,10 +538,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/employer/profile': {
       id: '/dashboard/employer/profile'
-      path: '/employer/profile'
+      path: '/dashboard/employer/profile'
       fullPath: '/dashboard/employer/profile'
       preLoaderRoute: typeof DashboardEmployerProfileRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/employer/employees': {
       id: '/dashboard/employer/employees'
@@ -585,44 +588,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DashboardRouteChildren {
-  DashboardLayoutRoute: typeof DashboardLayoutRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
-  DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
-  DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
-  DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
-  DashboardMemberProfileRoute: typeof DashboardMemberProfileRoute
-  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
-  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardLayoutRoute: DashboardLayoutRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
-  DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
-  DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
-  DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
-  DashboardMemberProfileRoute: DashboardMemberProfileRoute,
-  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
-  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoTrpcTodoRoute: DemoTrpcTodoRoute,
   PublicIndexRoute: PublicIndexRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
+  DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
+  DashboardMemberProfileRoute: DashboardMemberProfileRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,

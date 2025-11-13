@@ -22,7 +22,7 @@ export function Sidebar({ role }: SidebarProps) {
             // Clear client-side session cache
             await refresh();
             toast.success('Logged out successfully');
-            navigate({ to: '/' });
+            navigate({ to: '/login' });
         } catch (err) {
             // also clear session on error
             console.error(err);
