@@ -63,7 +63,7 @@ export function Sidebar({ role }: SidebarProps) {
                 >
                     Logout
                 </Button>
-                <span className="text-sm text-gray-500">© {new Date().getFullYear()} Pension Master</span>
+                <span className="text-sm text-gray-500">© {new Date().getFullYear()} Pension Master Portal</span>
             </div>
         </aside>
     );
