@@ -16,7 +16,7 @@ export const env = createEnv({
     SESSION_SECRET: z
       .string()
       .min(32)
-      .default('7d9c8a12a9c4e23c6f13c4a761dfbaf0e04cbf621ebc7a44ab7fa23e18c07d58c7e94f8a7c8492dfd6e4f1d3e8b9b6')
+      .default('qt2w7d9c8a12a9c4e23c6f13c4a761dfbaf0e04cbf621ebc7a44ab7fa23e18c07d58c7e94f8a7c8492dfd6e4f1d3e8b9b6')
       .describe('Secret key for session encryption (min 32 chars)'),
     SESSION_EXPIRY: z
       .coerce
