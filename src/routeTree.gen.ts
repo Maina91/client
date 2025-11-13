@@ -16,7 +16,6 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTrpcTodoRouteImport } from './routes/demo/trpc-todo'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
@@ -29,8 +28,10 @@ import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
 import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
 import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as DashboardMemberProfileRouteImport } from './routes/dashboard/member/profile'
 import { Route as DashboardMemberContributionsRouteImport } from './routes/dashboard/member/contributions'
 import { Route as DashboardMemberAccountsRouteImport } from './routes/dashboard/member/accounts'
+import { Route as DashboardEmployerProfileRouteImport } from './routes/dashboard/employer/profile'
 import { Route as DashboardEmployerEmployeesRouteImport } from './routes/dashboard/employer/employees'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api.trpc.$'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
@@ -69,11 +70,6 @@ const DemoTableRoute = DemoTableRouteImport.update({
   id: '/demo/table',
   path: '/demo/table',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
   id: '/_layout',
@@ -134,6 +130,11 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardMemberProfileRoute = DashboardMemberProfileRouteImport.update({
+  id: '/member/profile',
+  path: '/member/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardMemberContributionsRoute =
   DashboardMemberContributionsRouteImport.update({
     id: '/member/contributions',
@@ -145,6 +146,12 @@ const DashboardMemberAccountsRoute = DashboardMemberAccountsRouteImport.update({
   path: '/member/accounts',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardEmployerProfileRoute =
+  DashboardEmployerProfileRouteImport.update({
+    id: '/employer/profile',
+    path: '/employer/profile',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardEmployerEmployeesRoute =
   DashboardEmployerEmployeesRouteImport.update({
     id: '/employer/employees',
@@ -182,7 +189,6 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardLayoutRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
@@ -190,8 +196,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
   '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -210,15 +218,16 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
   '/': typeof PublicIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
   '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -239,7 +248,6 @@ export interface FileRoutesById {
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_layout': typeof DashboardLayoutRoute
-  '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/trpc-todo': typeof DemoTrpcTodoRoute
@@ -247,8 +255,10 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
   '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -269,7 +279,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-otp'
     | '/dashboard'
-    | '/dashboard/profile'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
@@ -277,8 +286,10 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/api/trpc/$'
     | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
     | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -297,15 +308,16 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-otp'
     | '/dashboard'
-    | '/dashboard/profile'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
     | '/'
     | '/api/trpc/$'
     | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
     | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -325,7 +337,6 @@ export interface FileRouteTypes {
     | '/_auth/verify-otp'
     | '/dashboard'
     | '/dashboard/_layout'
-    | '/dashboard/profile'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/demo/trpc-todo'
@@ -333,8 +344,10 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/api/trpc/$'
     | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
     | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -414,13 +427,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/demo/table'
       preLoaderRoute: typeof DemoTableRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/profile': {
-      id: '/dashboard/profile'
-      path: '/profile'
-      fullPath: '/dashboard/profile'
-      preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof DashboardRoute
     }
     '/dashboard/_layout': {
       id: '/dashboard/_layout'
@@ -506,6 +512,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/member/profile': {
+      id: '/dashboard/member/profile'
+      path: '/member/profile'
+      fullPath: '/dashboard/member/profile'
+      preLoaderRoute: typeof DashboardMemberProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/member/contributions': {
       id: '/dashboard/member/contributions'
       path: '/member/contributions'
@@ -518,6 +531,13 @@ declare module '@tanstack/react-router' {
       path: '/member/accounts'
       fullPath: '/dashboard/member/accounts'
       preLoaderRoute: typeof DashboardMemberAccountsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/employer/profile': {
+      id: '/dashboard/employer/profile'
+      path: '/employer/profile'
+      fullPath: '/dashboard/employer/profile'
+      preLoaderRoute: typeof DashboardEmployerProfileRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/employer/employees': {
@@ -567,22 +587,24 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardLayoutRoute: typeof DashboardLayoutRoute
-  DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
+  DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
   DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
   DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
+  DashboardMemberProfileRoute: typeof DashboardMemberProfileRoute
   DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
   DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardLayoutRoute: DashboardLayoutRoute,
-  DashboardProfileRoute: DashboardProfileRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
+  DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
   DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
   DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
+  DashboardMemberProfileRoute: DashboardMemberProfileRoute,
   DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
   DashboardMemberIndexRoute: DashboardMemberIndexRoute,
 }
