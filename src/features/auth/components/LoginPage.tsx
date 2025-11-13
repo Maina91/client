@@ -77,7 +77,7 @@ export function LoginPage() {
             <Card className="w-full max-w-md shadow-2xl rounded-2xl">
                 <CardHeader>
                     <CardTitle className="text-center text-xl font-bold">
-                        <span className="text-primary">Pension Master Portal</span>
+                        <span className="text-primary">Pension Portal</span>
                     </CardTitle>
                 </CardHeader>
 
