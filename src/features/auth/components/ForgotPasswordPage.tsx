@@ -1,9 +1,3 @@
-import React from 'react'
+export function ForgotPasswordPage() {
 
-const ForgotPasswordPage = () => {
-  return (
-    <div>ForgotPasswordPage</div>
-  )
 }
-
-export default ForgotPasswordPage

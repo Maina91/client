@@ -1,9 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { clearUserSession, getUSerSession } from '@/features/auth/action/session';
+import { IndexPage } from '@/features/member/components/IndexPage'
+
 
 export const Route = createFileRoute('/dashboard/member/')({
-  component: RouteComponent,
-})
+  beforeLoad: async ({ location }) => {
+    const res = await getUSerSession()
 
-function RouteComponent() {
-  return <div>Hello "/dashboard/employee/"!</div>
-}
+    if (!res.authenticated || res.user?.role !== 'MEMBER') {
+      await clearUserSession()
+      throw redirect({
+        to: '/dashboard',
+        search: { redirect: location.href },
+      })
+    }
+
+    return { session: res.user }
+  },
+  component: IndexPage,
+})

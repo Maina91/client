@@ -8,28 +8,32 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as DemoTrpcTodoRouteImport } from './routes/demo/trpc-todo'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as Dashboard_layoutRouteImport } from './routes/dashboard/__layout'
-import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
+import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
+import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
+import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as DashboardMemberIndexRouteImport } from './routes/dashboard/member/index'
 import { Route as DashboardEmployerIndexRouteImport } from './routes/dashboard/employer/index'
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
-import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
-import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
-import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
-import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as DashboardMemberProfileRouteImport } from './routes/dashboard/member/profile'
+import { Route as DashboardMemberContributionsRouteImport } from './routes/dashboard/member/contributions'
+import { Route as DashboardMemberAccountsRouteImport } from './routes/dashboard/member/accounts'
+import { Route as DashboardEmployerProfileRouteImport } from './routes/dashboard/employer/profile'
+import { Route as DashboardEmployerEmployeesRouteImport } from './routes/dashboard/employer/employees'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api.trpc.$'
-import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
-import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
-import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
-import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const DashboardRouteImport = createFileRoute('/dashboard')()
+
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -40,252 +44,199 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoTrpcTodoRoute = DemoTrpcTodoRouteImport.update({
-  id: '/demo/trpc-todo',
-  path: '/demo/trpc-todo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTableRoute = DemoTableRouteImport.update({
-  id: '/demo/table',
-  path: '/demo/table',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Dashboard_layoutRoute = Dashboard_layoutRouteImport.update({
-  id: '/__layout',
+const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => DashboardRoute,
 } as any)
-const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
-  id: '/_public/forgot-password',
+const AuthVerifyOtpRoute = AuthVerifyOtpRouteImport.update({
+  id: '/_auth/verify-otp',
+  path: '/verify-otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/_auth/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/_auth/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/_auth/forgot-password',
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardMemberIndexRoute = DashboardMemberIndexRouteImport.update({
-  id: '/dashboard/member/',
-  path: '/dashboard/member/',
-  getParentRoute: () => rootRouteImport,
+  id: '/member/',
+  path: '/member/',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardEmployerIndexRoute = DashboardEmployerIndexRouteImport.update({
   id: '/employer/',
   path: '/employer/',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
+const DashboardMemberProfileRoute = DashboardMemberProfileRouteImport.update({
+  id: '/member/profile',
+  path: '/member/profile',
+  getParentRoute: () => DashboardRoute,
 } as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
-  path: '/demo/start/api-request',
-  getParentRoute: () => rootRouteImport,
+const DashboardMemberContributionsRoute =
+  DashboardMemberContributionsRouteImport.update({
+    id: '/member/contributions',
+    path: '/member/contributions',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardMemberAccountsRoute = DashboardMemberAccountsRouteImport.update({
+  id: '/member/accounts',
+  path: '/member/accounts',
+  getParentRoute: () => DashboardRoute,
 } as any)
-const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
-  id: '/demo/form/simple',
-  path: '/demo/form/simple',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
-  id: '/demo/form/address',
-  path: '/demo/form/address',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoApiTqTodosRoute = DemoApiTqTodosRouteImport.update({
-  id: '/demo/api/tq-todos',
-  path: '/demo/api/tq-todos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
-  id: '/demo/api/names',
-  path: '/demo/api/names',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const DashboardEmployerProfileRoute =
+  DashboardEmployerProfileRouteImport.update({
+    id: '/employer/profile',
+    path: '/employer/profile',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardEmployerEmployeesRoute =
+  DashboardEmployerEmployeesRouteImport.update({
+    id: '/employer/employees',
+    path: '/employer/employees',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
   id: '/api/trpc/$',
   path: '/api/trpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
-  id: '/demo/start/ssr/',
-  path: '/demo/start/ssr/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
-  id: '/demo/start/ssr/spa-mode',
-  path: '/demo/start/ssr/spa-mode',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
-  id: '/demo/start/ssr/full-ssr',
-  path: '/demo/start/ssr/full-ssr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
-  id: '/demo/start/ssr/data-only',
-  path: '/demo/start/ssr/data-only',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
-  '/forgot-password': typeof PublicForgotPasswordRoute
-  '/dashboard': typeof Dashboard_layoutRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/trpc-todo': typeof DemoTrpcTodoRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/verify-otp': typeof AuthVerifyOtpRoute
+  '/dashboard': typeof DashboardLayoutRoute
   '/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
+  '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
+  '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/dashboard/employer': typeof DashboardEmployerIndexRoute
   '/dashboard/member': typeof DashboardMemberIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/forgot-password': typeof PublicForgotPasswordRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/trpc-todo': typeof DemoTrpcTodoRoute
   '/': typeof PublicIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
+  '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
+  '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/dashboard/employer': typeof DashboardEmployerIndexRoute
   '/dashboard/member': typeof DashboardMemberIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_public/forgot-password': typeof PublicForgotPasswordRoute
-  '/dashboard/__layout': typeof Dashboard_layoutRoute
-  '/demo/table': typeof DemoTableRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/demo/trpc-todo': typeof DemoTrpcTodoRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
+  '/_auth/verify-otp': typeof AuthVerifyOtpRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/_layout': typeof DashboardLayoutRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
+  '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
+  '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
+  '/dashboard/member/contributions': typeof DashboardMemberContributionsRoute
+  '/dashboard/member/profile': typeof DashboardMemberProfileRoute
   '/dashboard/employer/': typeof DashboardEmployerIndexRoute
   '/dashboard/member/': typeof DashboardMemberIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-otp'
     | '/dashboard'
-    | '/demo/table'
-    | '/demo/tanstack-query'
-    | '/demo/trpc-todo'
     | '/'
     | '/dashboard/'
     | '/api/trpc/$'
-    | '/demo/api/names'
-    | '/demo/api/tq-todos'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
+    | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
+    | '/dashboard/member/accounts'
+    | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/dashboard/employer'
     | '/dashboard/member'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-otp'
     | '/dashboard'
-    | '/demo/table'
-    | '/demo/tanstack-query'
-    | '/demo/trpc-todo'
     | '/'
     | '/api/trpc/$'
-    | '/demo/api/names'
-    | '/demo/api/tq-todos'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
+    | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
+    | '/dashboard/member/accounts'
+    | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/dashboard/employer'
     | '/dashboard/member'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
   id:
     | '__root__'
-    | '/_public/forgot-password'
-    | '/dashboard/__layout'
-    | '/demo/table'
-    | '/demo/tanstack-query'
-    | '/demo/trpc-todo'
+    | '/_auth/forgot-password'
+    | '/_auth/login'
+    | '/_auth/reset-password'
+    | '/_auth/verify-otp'
+    | '/dashboard'
+    | '/dashboard/_layout'
     | '/_public/'
     | '/dashboard/'
     | '/api/trpc/$'
-    | '/demo/api/names'
-    | '/demo/api/tq-todos'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
+    | '/dashboard/employer/employees'
+    | '/dashboard/employer/profile'
+    | '/dashboard/member/accounts'
+    | '/dashboard/member/contributions'
+    | '/dashboard/member/profile'
     | '/dashboard/employer/'
     | '/dashboard/member/'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
-  DemoTableRoute: typeof DemoTableRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  DemoTrpcTodoRoute: typeof DemoTrpcTodoRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
-  DemoApiNamesRoute: typeof DemoApiNamesRoute
-  DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
-  DemoFormAddressRoute: typeof DemoFormAddressRoute
-  DemoFormSimpleRoute: typeof DemoFormSimpleRoute
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
-  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
-  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
-  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
-  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -300,47 +251,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/trpc-todo': {
-      id: '/demo/trpc-todo'
-      path: '/demo/trpc-todo'
-      fullPath: '/demo/trpc-todo'
-      preLoaderRoute: typeof DemoTrpcTodoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/table': {
-      id: '/demo/table'
-      path: '/demo/table'
-      fullPath: '/demo/table'
-      preLoaderRoute: typeof DemoTableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/__layout': {
-      id: '/dashboard/__layout'
-      path: ''
+    '/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof Dashboard_layoutRouteImport
+      preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/_public/forgot-password': {
-      id: '/_public/forgot-password'
+    '/_auth/verify-otp': {
+      id: '/_auth/verify-otp'
+      path: '/verify-otp'
+      fullPath: '/verify-otp'
+      preLoaderRoute: typeof AuthVerifyOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
-      preLoaderRoute: typeof PublicForgotPasswordRouteImport
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/member/': {
       id: '/dashboard/member/'
-      path: '/dashboard/member'
+      path: '/member'
       fullPath: '/dashboard/member'
       preLoaderRoute: typeof DashboardMemberIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/employer/': {
       id: '/dashboard/employer/'
@@ -349,47 +300,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEmployerIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
-      path: '/demo/start/server-funcs'
-      fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/member/profile': {
+      id: '/dashboard/member/profile'
+      path: '/member/profile'
+      fullPath: '/dashboard/member/profile'
+      preLoaderRoute: typeof DashboardMemberProfileRouteImport
+      parentRoute: typeof DashboardRoute
     }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
-      path: '/demo/start/api-request'
-      fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/member/contributions': {
+      id: '/dashboard/member/contributions'
+      path: '/member/contributions'
+      fullPath: '/dashboard/member/contributions'
+      preLoaderRoute: typeof DashboardMemberContributionsRouteImport
+      parentRoute: typeof DashboardRoute
     }
-    '/demo/form/simple': {
-      id: '/demo/form/simple'
-      path: '/demo/form/simple'
-      fullPath: '/demo/form/simple'
-      preLoaderRoute: typeof DemoFormSimpleRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/member/accounts': {
+      id: '/dashboard/member/accounts'
+      path: '/member/accounts'
+      fullPath: '/dashboard/member/accounts'
+      preLoaderRoute: typeof DashboardMemberAccountsRouteImport
+      parentRoute: typeof DashboardRoute
     }
-    '/demo/form/address': {
-      id: '/demo/form/address'
-      path: '/demo/form/address'
-      fullPath: '/demo/form/address'
-      preLoaderRoute: typeof DemoFormAddressRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/employer/profile': {
+      id: '/dashboard/employer/profile'
+      path: '/employer/profile'
+      fullPath: '/dashboard/employer/profile'
+      preLoaderRoute: typeof DashboardEmployerProfileRouteImport
+      parentRoute: typeof DashboardRoute
     }
-    '/demo/api/tq-todos': {
-      id: '/demo/api/tq-todos'
-      path: '/demo/api/tq-todos'
-      fullPath: '/demo/api/tq-todos'
-      preLoaderRoute: typeof DemoApiTqTodosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/api/names': {
-      id: '/demo/api/names'
-      path: '/demo/api/names'
-      fullPath: '/demo/api/names'
-      preLoaderRoute: typeof DemoApiNamesRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/employer/employees': {
+      id: '/dashboard/employer/employees'
+      path: '/employer/employees'
+      fullPath: '/dashboard/employer/employees'
+      preLoaderRoute: typeof DashboardEmployerEmployeesRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/api/trpc/$': {
       id: '/api/trpc/$'
@@ -398,55 +342,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTrpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/': {
-      id: '/demo/start/ssr/'
-      path: '/demo/start/ssr'
-      fullPath: '/demo/start/ssr'
-      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/ssr/spa-mode': {
-      id: '/demo/start/ssr/spa-mode'
-      path: '/demo/start/ssr/spa-mode'
-      fullPath: '/demo/start/ssr/spa-mode'
-      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/ssr/full-ssr': {
-      id: '/demo/start/ssr/full-ssr'
-      path: '/demo/start/ssr/full-ssr'
-      fullPath: '/demo/start/ssr/full-ssr'
-      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/ssr/data-only': {
-      id: '/demo/start/ssr/data-only'
-      path: '/demo/start/ssr/data-only'
-      fullPath: '/demo/start/ssr/data-only'
-      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardLayoutRoute: typeof DashboardLayoutRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
+  DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
+  DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
+  DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
+  DashboardMemberProfileRoute: typeof DashboardMemberProfileRoute
+  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
+  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLayoutRoute: DashboardLayoutRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
+  DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
+  DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
+  DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
+  DashboardMemberProfileRoute: DashboardMemberProfileRoute,
+  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
+  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
-  DemoTableRoute: DemoTableRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  DemoTrpcTodoRoute: DemoTrpcTodoRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthVerifyOtpRoute: AuthVerifyOtpRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
-  DemoApiNamesRoute: DemoApiNamesRoute,
-  DemoApiTqTodosRoute: DemoApiTqTodosRoute,
-  DemoFormAddressRoute: DemoFormAddressRoute,
-  DemoFormSimpleRoute: DemoFormSimpleRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
-  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
-  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
-  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
-  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

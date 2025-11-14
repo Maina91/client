@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const USER_TYPE = ['employer', 'member'] as const;
+export const USER_TYPE = ['EMPLOYER', 'MEMBER'] as const;
 export type UserType = typeof USER_TYPE[number];
 
 
