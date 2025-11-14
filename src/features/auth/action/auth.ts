@@ -11,7 +11,7 @@ import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
-    .middleware([authRateLimitMiddleware, csrfMiddleware])
+    .middleware([authRateLimitMiddleware])
     .inputValidator(loginSchema)
     .handler(async ({ data }) => {
         try {
@@ -89,7 +89,7 @@ export const logoutAction = createServerFn({ method: 'POST' })
   })
 
 export const resetPassword = createServerFn({ method: 'POST' })
-    .middleware([authRateLimitMiddleware, csrfMiddleware])
+    .middleware([authRateLimitMiddleware])
     .inputValidator(resetPasswordSchema)
     .handler(async ({ data }) => {
         try {
