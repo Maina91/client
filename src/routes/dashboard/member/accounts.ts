@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { clearUserSession, getUSerSession } from '@/features/auth/action/auth'
+import { clearUserSession, getUSerSession } from '@/features/auth/action/session';
 import { AccountsPage } from '@/features/member/components/AccountsPage'
 
 

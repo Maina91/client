@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { DashboardLayout } from '@/features/dashboard/components/Layout'
-import { clearUserSession, getUSerSession } from '@/features/auth/action/auth'
+import { clearUserSession, getUSerSession } from '@/features/auth/action/session';
 
 
 export const Route = createFileRoute('/dashboard/_layout')({
