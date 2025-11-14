@@ -5,12 +5,12 @@ import type { SessionUser } from '@/features/auth/types/auth';
 import { useAppSession } from '@/lib/session';
 import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';
-// import { authMiddleware } from '@/middleware/authMiddleware';
-// import { csrfMiddleware } from '@/middleware/checkCsrfMiddleware';
+import { csrfMiddleware } from '@/middleware/csrfMiddleware';
+import { authMiddleware } from '@/middleware/authMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
-    // .middleware([authMiddleware, csrfMiddleware])
+    .middleware([csrfMiddleware])
     .inputValidator(loginSchema)
     .handler(async ({ data }) => {
         try {
@@ -54,7 +54,8 @@ export const loginAction = createServerFn({ method: 'POST' })
     })
 
 export const logoutAction = createServerFn({ method: 'POST' })
-    .handler(async () => {
+    .middleware([authMiddleware, csrfMiddleware])
+    .handler(async ({ context }) => {
         try {
             const session = await useAppSession()
             const auth_token = session.data.auth_token
@@ -139,6 +140,7 @@ export const clearUserSession = createServerFn({ method: 'POST' }).handler(
 
 
 export const resetPassword = createServerFn({ method: 'POST' })
+    .middleware([csrfMiddleware])
     .inputValidator(resetPasswordSchema)
     .handler(async ({ data }) => {
         try {
@@ -154,7 +156,7 @@ export const resetPassword = createServerFn({ method: 'POST' })
                 // login_token: res.member_token,
                 user: {
                     email: data.email,
-                    role: "member",
+                    role: "MEMBER",
                     custom_ref: res.customer_ref,
                 },
             })
@@ -174,6 +176,7 @@ export const resetPassword = createServerFn({ method: 'POST' })
     })
 
 export const updatePassword = createServerFn({ method: 'POST' })
+    .middleware([csrfMiddleware])
     .inputValidator(updatePasswordSchema)
     .handler(async ({ data }) => {
         try {

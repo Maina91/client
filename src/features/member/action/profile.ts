@@ -1,29 +1,31 @@
 import { createServerFn } from '@tanstack/react-start'
 import { MemberProfileService } from '../service/profile';
-import { useAppSession } from '@/lib/session';
 import { authMiddleware } from '@/middleware/authMiddleware';
-// import { csrfMiddleware } from '@/middleware/checkCsrfMiddleware';
-
 
 export const MemberProfileAction = createServerFn({ method: 'GET' })
     .middleware([authMiddleware])
-        .handler(async () => {
+    .handler(async ({ context }) => {
         try {
-            const session = await useAppSession()
-            const auth_token = session.data.auth_token
+            const { user } = context;
 
+            const auth_token = context.authToken; 
+            
             if (!auth_token) {
-                throw new Response("Unauthorized", { status: 401 });
+                throw new Response("Missing auth token", { status: 401 });
             }
+
 
             const profile = await MemberProfileService(auth_token)
 
             // user session data to be updated later
             const member_no = profile.profile.member_no
             if (member_no) {
+                // Note: Session updates might need to be handled differently with middleware
+                // For now, keeping similar logic; consider moving to middleware if needed
+                const session = await import('@/lib/session').then(m => m.useAppSession());
                 await session.update({
                     user: {
-                        ...session.data.user!,
+                        ...user,
                         member_no,
                     },
                 })

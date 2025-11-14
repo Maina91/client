@@ -38,6 +38,7 @@ export const authMiddleware = createMiddleware({ type: "function" }).server(
         return next({
             context: {
                 user: data.user,
+                authToken: data.auth_token,
                 csrfToken: data.csrfToken,
             },
         });
