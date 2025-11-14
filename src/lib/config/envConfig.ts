@@ -2,7 +2,17 @@ import { env } from "@/env";
 
 export const NODE_ENV = env.NODE_ENV
 export const API_URL = env.API_URL
+
+// Session configuration
 export const SESSION_SECRET = env.SESSION_SECRET
 export const SESSION_EXPIRY_SEC = env.SESSION_EXPIRY
-export const SESSION_COOKIE_DOMAIN = env.SESSION_COOKIE_DOMAIN 
+export const SESSION_COOKIE_DOMAIN = env.SESSION_COOKIE_DOMAIN
+
+// Rate limiting configuration
+export const RATE_LIMIT_ENABLED = env.RATE_LIMIT_ENABLED
+export const RATE_LIMIT_MAX_REQUESTS_PER_MINUTE = env.RATE_LIMIT_MAX_REQUESTS_PER_MINUTE
+export const RATE_LIMIT_WINDOW_MS = env.RATE_LIMIT_WINDOW_MS
+export const RATE_LIMIT_AUTH_MAX_REQUESTS = env.RATE_LIMIT_AUTH_MAX_REQUESTS
+export const RATE_LIMIT_AUTH_WINDOW_MS = env.RATE_LIMIT_AUTH_WINDOW_MS
+export const RATE_LIMIT_GLOBAL_MAX_REQUESTS = env.RATE_LIMIT_GLOBAL_MAX_REQUESTS
 
