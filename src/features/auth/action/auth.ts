@@ -5,9 +5,12 @@ import type { SessionUser } from '@/features/auth/types/auth';
 import { useAppSession } from '@/lib/session';
 import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';
+// import { authMiddleware } from '@/middleware/authMiddleware';
+// import { csrfMiddleware } from '@/middleware/checkCsrfMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
+    // .middleware([authMiddleware, csrfMiddleware])
     .inputValidator(loginSchema)
     .handler(async ({ data }) => {
         try {

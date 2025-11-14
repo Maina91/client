@@ -1,6 +1,6 @@
 import { getAppSession } from "@/lib/session";
 
-export async function requireCsrf(request: Request) {
+export async function csrfMiddleware(request: Request) {
     const session = await getAppSession();
     const data = session.data; 
 

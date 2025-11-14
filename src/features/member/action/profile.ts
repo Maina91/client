@@ -1,14 +1,20 @@
 import { createServerFn } from '@tanstack/react-start'
 import { MemberProfileService } from '../service/profile';
 import { useAppSession } from '@/lib/session';
+import { authMiddleware } from '@/middleware/authMiddleware';
+// import { csrfMiddleware } from '@/middleware/checkCsrfMiddleware';
+
 
 export const MemberProfileAction = createServerFn({ method: 'GET' })
-    .handler(async () => {
+    .middleware([authMiddleware])
+        .handler(async () => {
         try {
             const session = await useAppSession()
             const auth_token = session.data.auth_token
 
-            if (!auth_token) throw new Error('Unauthorized')
+            if (!auth_token) {
+                throw new Response("Unauthorized", { status: 401 });
+            }
 
             const profile = await MemberProfileService(auth_token)
 
