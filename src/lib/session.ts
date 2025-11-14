@@ -1,5 +1,5 @@
 import { useSession } from '@tanstack/react-start/server'
-import type { SessionData } from '@/features/auth/types/auth'
+import type { SessionData } from '@/features/auth/types/session'
 import {
   NODE_ENV,
   SESSION_COOKIE_DOMAIN,

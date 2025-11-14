@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '../service/authService'
 import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '../schema/auth.schema'
-import type { SessionUser } from '@/features/auth/types/auth';
+import type { SessionUser } from '../types/session'
 import { useAppSession } from '@/lib/session';
 import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';

@@ -1,16 +1,9 @@
 import type { OtpData, ResendOtpData } from '../schema/otp.schema'
+import type { OtpResponse, ResendOtpResponse } from '../types/otp'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
+import { getSdk } from '@/generated/graphql'
 
-export interface OtpResponse {
-  token: string
-  message: string
-  member_status: string
-  accounts_count: number
-}
 
-export interface ResendOtpResponse {
-  message: string
-}
 
 const VERIFY_OTP_MUTATION = `
   mutation VerifyOtp($input: OtpInput!) {
@@ -37,6 +30,8 @@ export async function verifyOtpService(
 ): Promise<OtpResponse> {
   try {
     const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
+
 
     const response = await client.request<{
       verifyOtp: {

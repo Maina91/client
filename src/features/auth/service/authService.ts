@@ -1,3 +1,4 @@
+import type { LoginResponse, LogoutResponse } from '@/generated/graphql'
 import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
@@ -13,20 +14,6 @@ export interface ResetPasswordData {
 export interface UpdatePasswordData {
   currentPassword: string
   newPassword: string
-}
-
-export interface LoginResponse {
-  access_token: string
-  refresh_token: string
-  user: {
-    id: string
-    email: string
-    role: string
-  }
-}
-
-export interface LogoutResponse {
-  success: boolean
 }
 
 export interface ResetPasswordResponse {
