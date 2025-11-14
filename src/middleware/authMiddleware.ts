@@ -1,11 +1,6 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { getAppSession } from "@/lib/session";
 
-/**
- * Authentication middleware
- * - Validates session
- * - Extends sliding window
- */
 export const authMiddleware = createMiddleware({ type: "function" }).server(
     async ({ next }) => {
         const session = await getAppSession();
