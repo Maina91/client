@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUSerSession } from '../action/auth';
+import { getUSerSession } from '../action/session';
 import type { SessionUser } from '@/features/auth/types/auth';
 import type { UserType } from '@/features/auth/schema/auth.schema';
 

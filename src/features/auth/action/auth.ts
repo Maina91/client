@@ -32,6 +32,7 @@ export const loginAction = createServerFn({ method: 'POST' })
 
             await session.update({
                 is_authed: true,
+                otp_token: response.token,
                 user: user,
                 lastTouch: now,
                 createdAt: now,
@@ -57,14 +58,15 @@ export const logoutAction = createServerFn({ method: 'POST' })
     .middleware([authMiddleware, csrfMiddleware])
     .handler(async ({ context }) => {
         try {
-            const session = await useAppSession()
-            const auth_token = session.data.auth_token
+            const user = context;
+            const auth_token = user.authToken;
 
             if (!auth_token) {
                 throw new Response("Unauthorized", { status: 401 });
             }
 
             const res = await logoutUserService(auth_token)
+            const session = await useAppSession()
             await session.clear()
 
             return {
@@ -97,6 +99,7 @@ export const resetPassword = createServerFn({ method: 'POST' })
                 is_authed: false,
                 // login_token: res.member_token,
                 user: {
+                    member_no: null,
                     email: data.email,
                     role: "MEMBER",
                     custom_ref: res.customer_ref,
@@ -120,10 +123,14 @@ export const resetPassword = createServerFn({ method: 'POST' })
 export const updatePassword = createServerFn({ method: 'POST' })
     .middleware([csrfMiddleware])
     .inputValidator(updatePasswordSchema)
-    .handler(async ({ data }) => {
+    .handler(async ({ context, data }) => {
         try {
-            const session = await useAppSession()
-            const login_token = session.data.login_token
+            const user = context;
+            const login_token = user.authToken;
+
+            if (!login_token) {
+                throw new Response("Unauthorized", { status: 401 });
+            }
 
             if (!login_token) {
                 throw new Error('OTP session expired or invalid')
@@ -135,6 +142,7 @@ export const updatePassword = createServerFn({ method: 'POST' })
                 throw new Error(res.message || 'Unable to reset password')
             }
 
+            const session = await useAppSession()
             await session.clear()
 
             return {

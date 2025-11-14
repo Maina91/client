@@ -6,9 +6,9 @@ export const MemberProfileAction = createServerFn({ method: 'GET' })
     .middleware([authMiddleware])
     .handler(async ({ context }) => {
         try {
-            const { user } = context;
+            const user = context;
 
-            const auth_token = context.authToken; 
+            const auth_token = user.authToken; 
             
             if (!auth_token) {
                 throw new Response("Missing auth token", { status: 401 });
