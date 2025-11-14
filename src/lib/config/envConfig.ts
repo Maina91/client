@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from '@/env'
 
 export const NODE_ENV = env.NODE_ENV
 export const API_URL = env.API_URL

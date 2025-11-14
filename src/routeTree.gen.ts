@@ -25,7 +25,6 @@ import { Route as DashboardMemberContributionsRouteImport } from './routes/dashb
 import { Route as DashboardMemberAccountsRouteImport } from './routes/dashboard/member/accounts'
 import { Route as DashboardEmployerProfileRouteImport } from './routes/dashboard/employer/profile'
 import { Route as DashboardEmployerEmployeesRouteImport } from './routes/dashboard/employer/employees'
-import { Route as ApiTrpcSplatRouteImport } from './routes/api.trpc.$'
 
 const DashboardRouteImport = createFileRoute('/dashboard')()
 
@@ -106,11 +105,6 @@ const DashboardEmployerEmployeesRoute =
     path: '/employer/employees',
     getParentRoute: () => DashboardRoute,
   } as any)
-const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
-  id: '/api/trpc/$',
-  path: '/api/trpc/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -120,7 +114,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardLayoutRoute
   '/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
   '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
@@ -136,7 +129,6 @@ export interface FileRoutesByTo {
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/dashboard': typeof DashboardIndexRoute
   '/': typeof PublicIndexRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
   '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
@@ -155,7 +147,6 @@ export interface FileRoutesById {
   '/dashboard/_layout': typeof DashboardLayoutRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
   '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
@@ -174,7 +165,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/'
     | '/dashboard/'
-    | '/api/trpc/$'
     | '/dashboard/employer/employees'
     | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
@@ -190,7 +180,6 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/dashboard'
     | '/'
-    | '/api/trpc/$'
     | '/dashboard/employer/employees'
     | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
@@ -208,7 +197,6 @@ export interface FileRouteTypes {
     | '/dashboard/_layout'
     | '/_public/'
     | '/dashboard/'
-    | '/api/trpc/$'
     | '/dashboard/employer/employees'
     | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
@@ -225,7 +213,6 @@ export interface RootRouteChildren {
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
-  ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -335,13 +322,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEmployerEmployeesRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/api/trpc/$': {
-      id: '/api/trpc/$'
-      path: '/api/trpc/$'
-      fullPath: '/api/trpc/$'
-      preLoaderRoute: typeof ApiTrpcSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -380,7 +360,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   DashboardRoute: DashboardRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
-  ApiTrpcSplatRoute: ApiTrpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

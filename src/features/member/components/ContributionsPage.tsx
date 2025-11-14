@@ -1,3 +1,1 @@
-export function ContributionsPage() {
-    
-}
+export function ContributionsPage() {}

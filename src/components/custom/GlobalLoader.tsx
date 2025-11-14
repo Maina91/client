@@ -1,13 +1,13 @@
-import { useIsFetching, useIsMutating } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
+import { useIsFetching, useIsMutating } from '@tanstack/react-query'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export const GlobalLoader = () => {
-  const isFetching = useIsFetching();
-  const isMutating = useIsMutating();
-  const isVisible = isFetching > 0 || isMutating > 0;
+  const isFetching = useIsFetching()
+  const isMutating = useIsMutating()
+  const isVisible = isFetching > 0 || isMutating > 0
 
-  const hidden = { opacity: 0, scaleY: 0 };
-  const visible = { opacity: 1, scaleY: 1, transition: { duration: 0.25 } };
+  const hidden = { opacity: 0, scaleY: 0 }
+  const visible = { opacity: 1, scaleY: 1, transition: { duration: 0.25 } }
 
   return (
     <AnimatePresence mode="wait">
@@ -20,7 +20,7 @@ export const GlobalLoader = () => {
           exit={{
             opacity: 0,
             scaleY: 0,
-            transition: { duration: 0.3, ease: "easeInOut" },
+            transition: { duration: 0.3, ease: 'easeInOut' },
           }}
         >
           <motion.div
@@ -28,13 +28,13 @@ export const GlobalLoader = () => {
             animate="swing"
             variants={{
               swing: {
-                x: ["300%", "-100%"],
+                x: ['300%', '-100%'],
                 opacity: [1, 0.7, 1],
                 transition: {
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                   duration: 1.3,
                   repeat: Infinity,
-                  repeatType: "mirror",
+                  repeatType: 'mirror',
                 },
               },
             }}
@@ -42,5 +42,5 @@ export const GlobalLoader = () => {
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}

@@ -1,3 +1,1 @@
-export function EmployeesPage() {
-
-}
+export function EmployeesPage() {}

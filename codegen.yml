@@ -1,0 +1,20 @@
+schema: http://localhost:4000/graphql
+documents: 'src/**/*.graphql'
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      rawRequest: false
+      inlineFragmentTypes: combine
+      skipTypename: false
+      dedupeFragments: true
+      preResolveTypes: false
+      avoidOptionals: false
+      maybeValue: T | null
+      inputMaybeValue: T | null
+      scalars:
+        DateTime: string
+        JSON: Record<string, any>

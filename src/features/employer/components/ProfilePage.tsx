@@ -1,3 +1,1 @@
-export function ProfilePage() {
-
-}
+export function ProfilePage() {}

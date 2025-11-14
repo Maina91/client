@@ -1,3 +1,1 @@
-export function ForgotPasswordPage() {
-
-}
+export function ForgotPasswordPage() {}

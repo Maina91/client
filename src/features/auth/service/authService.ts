@@ -1,86 +1,118 @@
-// import type { LoginData, ResetPasswordData, updatePasswordData } from '../schema/auth.schema'
-// import type { LoginResponse, LogoutResponse, ResetPasswordResponse } from '../types/auth'
-// import { useTRPC } from '@/integrations/trpc/react'
+import { getSdk } from '@/generated/graphql'
+import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
+export interface LoginData {
+  email: string
+  password: string
+}
 
-// export async function loginUserService(
-//     data: LoginData,
-// ): Promise<LoginResponse> {
-//     try {
-//         const loginEndpoint = '/lofty/login'
+export interface ResetPasswordData {
+  email: string
+}
 
-//         const res = await useTRPC.post<LoginResponse>(loginEndpoint, data)
-//         console.log('login res', res)
+export interface UpdatePasswordData {
+  currentPassword: string
+  newPassword: string
+}
 
-//         return res
-//     } catch (err: any) {
-//         if (err.response?.data?.message) {
-//             throw new Error(err.response.data.message)
-//         }
-//         throw new Error('Unable to login. Please try again later.')
-//     }
-// }
+export interface LoginResponse {
+  access_token: string
+  refresh_token: string
+  user: {
+    id: string
+    email: string
+    role: string
+  }
+}
 
-// export async function logoutUserService(
-//     token: string,
-// ): Promise<LogoutResponse> {
-//     try {
-//         const LogoutEndpoint = '/logout'
+export interface LogoutResponse {
+  success: boolean
+}
 
-//         const res = await useTRPC.post<LogoutResponse>(LogoutEndpoint, null, {
-//             headers: {
-//                 'auth-token': token,
-//             },
-//         })
-//         console.log('logout res', res)
+export interface ResetPasswordResponse {
+  success: boolean
+  message: string
+}
 
-//         return res
-//     } catch (err: any) {
-//         if (err.response?.data?.message) {
-//             throw new Error(err.response.data.message)
-//         }
-//         throw new Error('Unable to logout. Please try again later.')
-//     }
-// }
+export async function loginUserService(
+  data: LoginData,
+  token?: string | null,
+): Promise<LoginResponse> {
+  try {
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
 
-// export async function resetPasswordService(
-//     data: ResetPasswordData,
-// ): Promise<ResetPasswordResponse> {
-//     try {
-//         const endpoint = '/lofty/reset_email'
+    const response = await sdk.Login({ input: data })
 
-//         const res = await useTRPC.post<ResetPasswordResponse>(endpoint, data)
-//         console.log('reset pass res', res)
+    if (!response.login) {
+      throw new Error('Login failed')
+    }
 
-//         return res
-//     } catch (err: any) {
-//         if (err.response?.data?.message) {
-//             throw new Error(err.response.data.message)
-//         }
-//         throw new Error('Unable reset password. Please try again later.')
-//     }
-// }
+    return response.login
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
 
-// export async function updatePasswordService(
-//     token: string,
-//     data: updatePasswordData,
-// ): Promise<ResetPasswordResponse> {
-//     try {
-//         const endpoint = '/lofty/reset_email'
+export async function logoutUserService(
+  token: string,
+): Promise<LogoutResponse> {
+  try {
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
 
-//         const res = await useTRPC.post<ResetPasswordResponse>(endpoint, data, {
-//             headers: {
-//                 'auth-token': token,
-//             },
-//         })
-//         console.log('update pass res', res)
+    const response = await sdk.Logout()
 
-//         return res
-//     } catch (err: any) {
-//         if (err.response?.data?.message) {
-//             throw new Error(err.response.data.message)
-//         }
-//         throw new Error('Unable reset password. Please try again later.')
-//     }
-// }
+    if (!response.logout) {
+      throw new Error('Logout failed')
+    }
 
+    return response.logout
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
+
+export async function resetPasswordService(
+  data: ResetPasswordData,
+  token?: string | null,
+): Promise<ResetPasswordResponse> {
+  try {
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
+
+    const response = await sdk.ResetPassword({ input: data })
+
+    if (!response.resetPassword) {
+      throw new Error('Reset password failed')
+    }
+
+    return response.resetPassword
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
+
+export async function updatePasswordService(
+  data: UpdatePasswordData,
+  token: string,
+): Promise<ResetPasswordResponse> {
+  try {
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
+
+    const response = await sdk.UpdatePassword({ input: data })
+
+    if (!response.updatePassword) {
+      throw new Error('Update password failed')
+    }
+
+    return response.updatePassword
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}

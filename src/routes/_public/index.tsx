@@ -4,5 +4,5 @@ export const Route = createFileRoute('/_public/')({
   beforeLoad: () => {
     throw redirect({ to: '/login' })
   },
-  component: () => null, 
+  component: () => null,
 })
