@@ -1,27 +1,20 @@
 import { createServerFn } from '@tanstack/react-start'
-import {
-  loginUserService,
-  logoutUserService,
-  resetPasswordService,
-  updatePasswordService,
-} from '../service/authService'
-import {
-  loginSchema,
-  resetPasswordSchema,
-  updatePasswordSchema,
-} from '../schema/auth.schema'
-import type { SessionUser } from '@/features/auth/types/auth'
-import { useAppSession } from '@/lib/session'
-import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig'
-import { generateCsrfToken } from '@/lib/generateCsrf'
-import { csrfMiddleware } from '@/middleware/csrfMiddleware'
-import { authMiddleware } from '@/middleware/authMiddleware'
+import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '../service/authService'
+import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '../schema/auth.schema'
+import type { SessionUser } from '@/features/auth/types/auth';
+import { useAppSession } from '@/lib/session';
+import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
+import { generateCsrfToken } from '@/lib/generateCsrf';
+import { csrfMiddleware } from '@/middleware/csrfMiddleware';
+import { authMiddleware } from '@/middleware/authMiddleware';
+import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
+
 
 export const loginAction = createServerFn({ method: 'POST' })
-  .middleware([csrfMiddleware])
-  .inputValidator(loginSchema)
-  .handler(async ({ data }) => {
-    try {
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
+    .inputValidator(loginSchema)
+    .handler(async ({ data }) => {
+        try {
       const response = await loginUserService({
         email: data.email_address,
         password: data.password,
@@ -29,7 +22,7 @@ export const loginAction = createServerFn({ method: 'POST' })
 
       if (!response.access_token) {
         throw new Error('An error occurred')
-      }
+            }
 
       const session = await useAppSession()
       await session.clear()
@@ -96,11 +89,11 @@ export const logoutAction = createServerFn({ method: 'POST' })
   })
 
 export const resetPassword = createServerFn({ method: 'POST' })
-  .middleware([csrfMiddleware])
-  .inputValidator(resetPasswordSchema)
-  .handler(async ({ data }) => {
-    try {
-      const res = await resetPasswordService(data)
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
+    .inputValidator(resetPasswordSchema)
+    .handler(async ({ data }) => {
+        try {
+            const res = await resetPasswordService(data)
 
       const session = await useAppSession()
       await session.update({
@@ -126,10 +119,10 @@ export const resetPassword = createServerFn({ method: 'POST' })
   })
 
 export const updatePassword = createServerFn({ method: 'POST' })
-  .middleware([csrfMiddleware])
-  .inputValidator(updatePasswordSchema)
-  .handler(async ({ context, data }) => {
-    try {
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
+    .inputValidator(updatePasswordSchema)
+    .handler(async ({ context, data }) => {
+        try {
       const user = context
       const login_token = user?.authToken
 

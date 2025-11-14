@@ -4,14 +4,16 @@ import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 import { authMiddleware } from '@/middleware/authMiddleware'
 import { csrfMiddleware } from '@/middleware/csrfMiddleware'
+import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware'
 import { useAppSession } from '@/lib/session'
 
+
 export const verifyOtpAction = createServerFn({ method: 'POST' })
-  .middleware([authMiddleware, csrfMiddleware])
-  .inputValidator(otpSchema)
-  .handler(async ({ context, data }) => {
-    try {
-      const auth_token = context.authToken
+    .middleware([authRateLimitMiddleware, authMiddleware, csrfMiddleware])
+    .inputValidator(otpSchema)
+    .handler(async ({ context, data }) => {
+        try {
+            const auth_token = context.authToken
 
       if (!auth_token) {
         throw new Response('Unauthorized', { status: 401 })
@@ -27,11 +29,11 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
       }
 
       const session = await useAppSession()
-      await session.update({
-        is_authed: true,
+            await session.update({
+                is_authed: true,
         auth_token: response.verifyOtp.token,
         otp_token: undefined,
-      })
+            })
 
       return {
         success: true,
@@ -49,9 +51,10 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
   })
 
 export const resendOtpAction = createServerFn({ method: 'POST' })
-  .inputValidator(resendOtpSchema)
-  .handler(async ({ data }) => {
-    try {
+    .middleware([authRateLimitMiddleware])
+    .inputValidator(resendOtpSchema)
+    .handler(async ({ data }) => {
+        try {
       const session = await useAppSession()
       const sessionData = await session.data
       const login_token = sessionData.otp_token
