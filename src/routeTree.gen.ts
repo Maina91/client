@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -26,13 +24,6 @@ import { Route as DashboardMemberAccountsRouteImport } from './routes/dashboard/
 import { Route as DashboardEmployerProfileRouteImport } from './routes/dashboard/employer/profile'
 import { Route as DashboardEmployerEmployeesRouteImport } from './routes/dashboard/employer/employees'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -143,7 +134,6 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_layout': typeof DashboardLayoutRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -193,7 +183,6 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/reset-password'
     | '/_auth/verify-otp'
-    | '/dashboard'
     | '/dashboard/_layout'
     | '/_public/'
     | '/dashboard/'
@@ -211,19 +200,11 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -240,7 +221,7 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/_layout': {
       id: '/dashboard/_layout'
-      path: '/dashboard'
+      path: ''
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
@@ -325,40 +306,11 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DashboardRouteChildren {
-  DashboardLayoutRoute: typeof DashboardLayoutRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
-  DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
-  DashboardMemberAccountsRoute: typeof DashboardMemberAccountsRoute
-  DashboardMemberContributionsRoute: typeof DashboardMemberContributionsRoute
-  DashboardMemberProfileRoute: typeof DashboardMemberProfileRoute
-  DashboardEmployerIndexRoute: typeof DashboardEmployerIndexRoute
-  DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardLayoutRoute: DashboardLayoutRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
-  DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
-  DashboardMemberAccountsRoute: DashboardMemberAccountsRoute,
-  DashboardMemberContributionsRoute: DashboardMemberContributionsRoute,
-  DashboardMemberProfileRoute: DashboardMemberProfileRoute,
-  DashboardEmployerIndexRoute: DashboardEmployerIndexRoute,
-  DashboardMemberIndexRoute: DashboardMemberIndexRoute,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
 }
 export const routeTree = rootRouteImport
