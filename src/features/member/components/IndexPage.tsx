@@ -1,3 +1,1 @@
-export function IndexPage() {
-
-}
+export function IndexPage() {}

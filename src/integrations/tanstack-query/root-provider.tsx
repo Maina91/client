@@ -1,44 +1,40 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import superjson from 'superjson'
-import { createTRPCClient, httpBatchStreamLink } from '@trpc/client'
-import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
-
-import type { TRPCRouter } from '@/integrations/trpc/router'
-
-import { TRPCProvider } from '@/integrations/trpc/react'
-
-function getUrl() {
-  const base = (() => {
-    if (typeof window !== 'undefined') return ''
-    return `http://localhost:${process.env.PORT ?? 3000}`
-  })()
-  return `${base}/api/trpc`
-}
-
-export const trpcClient = createTRPCClient<TRPCRouter>({
-  links: [
-    httpBatchStreamLink({
-      transformer: superjson,
-      url: getUrl(),
-    }),
-  ],
-})
+import { useState } from 'react'
 
 export function getContext() {
   const queryClient = new QueryClient({
     defaultOptions: {
+      queries: {
+        // With SSR, we usually want to set some default staleTime
+        // above 0 to avoid refetching immediately on the client
+        staleTime: 60 * 1000, // 1 minute
+        gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+        retry: (failureCount, error: any) => {
+          // Don't retry on 4xx errors
+          if (error?.status >= 400 && error?.status < 500) {
+            return false
+          }
+          // Retry up to 3 times for other errors
+          return failureCount < 3
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
+      },
+      mutations: {
+        retry: false, // Don't retry mutations by default
+        onError: (error: any) => {
+          // Global error handling for mutations
+          console.error('Mutation error:', error)
+        },
+      },
       dehydrate: { serializeData: superjson.serialize },
       hydrate: { deserializeData: superjson.deserialize },
     },
   })
-
-  const serverHelpers = createTRPCOptionsProxy({
-    client: trpcClient,
-    queryClient: queryClient,
-  })
   return {
     queryClient,
-    trpc: serverHelpers,
   }
 }
 
@@ -49,9 +45,12 @@ export function Provider({
   children: React.ReactNode
   queryClient: QueryClient
 }) {
+  const [client] = useState(() => queryClient)
+
   return (
-    <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+    <QueryClientProvider client={client}>
       {children}
-    </TRPCProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

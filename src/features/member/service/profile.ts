@@ -1,33 +1,38 @@
-import type { MemberProfileResponse } from "../types/memberProfile"
-import { apiClient } from '@/core/lib/api.client'
+import { getSdk } from '@/generated/graphql'
+import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
-
-export async function MemberProfileService(
-    token: string,
-): Promise<MemberProfileResponse> {
-    try {
-        if (!token) throw new Error('Unauthorized')
-
-        const clientProfileEndpoint = '/lofty/client_profile'
-
-        const res = await apiClient.get<MemberProfileResponse>(clientProfileEndpoint, {
-            headers: {
-                'auth-token': token,
-            },
-        })
-
-        if (res.status_code !== 200) {
-            throw new Error('Unable to fetch client profile')
-        }
-
-        return res
-
-    } catch (error: any) {
-        if (error.response?.data?.message) {
-            throw new Error(error.response.data.message)
-        }
-        throw new Error('Unable to fetch client profile. Please try again later.')
-
-    }
+export interface MemberProfileResponse {
+  profile: {
+    member_no: string
+    first_name: string
+    last_name: string
+    email: string
+    phone: string
+    date_of_birth: string
+    address: string
+  }
+  status_code: number
+  message: string
 }
 
+export async function MemberProfileService(
+  token: string,
+): Promise<MemberProfileResponse> {
+  try {
+    if (!token) throw new Error('Unauthorized')
+
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
+
+    const response = await sdk.GetMemberProfile()
+
+    if (!response.memberProfile) {
+      throw new Error('Unable to fetch member profile')
+    }
+
+    return response.memberProfile
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
