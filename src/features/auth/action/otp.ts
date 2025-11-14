@@ -3,10 +3,12 @@ import { otpSchema, resendOtpSchema } from '../schema/otp.schema'
 import { resendOtpService, verifyOtpService, } from '@/core/services/auth/otp.service'
 import { authMiddleware } from '@/middleware/authMiddleware'
 import { csrfMiddleware } from '@/middleware/csrfMiddleware'
+import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware'
+import { useAppSession } from '@/lib/session'
 
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
-    .middleware([authMiddleware, csrfMiddleware])
+    .middleware([authRateLimitMiddleware, authMiddleware, csrfMiddleware])
     .inputValidator(otpSchema)
     .handler(async ({ context, data }) => {
         try {
@@ -22,10 +24,10 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
                 throw new Error("OTP verification failed")
             }
 
+            const session = await useAppSession();
             await session.update({
                 is_authed: true,
                 auth_token: res.token,
-                login_token: undefined,
             })
 
             return {
@@ -43,10 +45,12 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
     })
 
 export const resendOtpAction = createServerFn({ method: 'POST' })
+    .middleware([authRateLimitMiddleware])
     .inputValidator(resendOtpSchema)
     .handler(async ({ data }) => {
         try {
-            const login_token = session.data.login_token
+            const session = await useAppSession();
+            const login_token = session.data.otp_token
 
             if (!login_token) {
                 throw new Error('OTP session expired or invalid')

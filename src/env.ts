@@ -30,6 +30,42 @@ export const env = createEnv({
       .regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/, 'Must be a valid domain')
       .optional()
       .describe('Domain for cookies (e.g., example.com)'),
+    // Rate limiting configuration
+    RATE_LIMIT_ENABLED: z
+      .coerce
+      .boolean()
+      .default(true)
+      .describe('Enable rate limiting'),
+    RATE_LIMIT_MAX_REQUESTS_PER_MINUTE: z
+      .coerce
+      .number()
+      .positive()
+      .default(100)
+      .describe('Max requests per minute per user/IP'),
+    RATE_LIMIT_WINDOW_MS: z
+      .coerce
+      .number()
+      .positive()
+      .default(60000)
+      .describe('Rate limit window in milliseconds'),
+    RATE_LIMIT_AUTH_MAX_REQUESTS: z
+      .coerce
+      .number()
+      .positive()
+      .default(5)
+      .describe('Max auth requests per window per IP'),
+    RATE_LIMIT_AUTH_WINDOW_MS: z
+      .coerce
+      .number()
+      .positive()
+      .default(300000)
+      .describe('Auth rate limit window in milliseconds (5 minutes)'),
+    RATE_LIMIT_GLOBAL_MAX_REQUESTS: z
+      .coerce
+      .number()
+      .positive()
+      .default(1000)
+      .describe('Global max requests per window'),
   },
   clientPrefix: 'VITE_',
   client: {

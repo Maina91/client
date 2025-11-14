@@ -7,10 +7,11 @@ import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';
 import { csrfMiddleware } from '@/middleware/csrfMiddleware';
 import { authMiddleware } from '@/middleware/authMiddleware';
+import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
-    .middleware([csrfMiddleware])
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
     .inputValidator(loginSchema)
     .handler(async ({ data }) => {
         try {
@@ -84,7 +85,7 @@ export const logoutAction = createServerFn({ method: 'POST' })
     })
 
 export const resetPassword = createServerFn({ method: 'POST' })
-    .middleware([csrfMiddleware])
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
     .inputValidator(resetPasswordSchema)
     .handler(async ({ data }) => {
         try {
@@ -121,7 +122,7 @@ export const resetPassword = createServerFn({ method: 'POST' })
     })
 
 export const updatePassword = createServerFn({ method: 'POST' })
-    .middleware([csrfMiddleware])
+    .middleware([authRateLimitMiddleware, csrfMiddleware])
     .inputValidator(updatePasswordSchema)
     .handler(async ({ context, data }) => {
         try {
