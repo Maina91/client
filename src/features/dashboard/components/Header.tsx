@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import type { UserType } from '@/features/auth/schema/auth.schema';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useCustomerProfile } from '@/features/member/hooks/useProfile';
+import { useMemberProfile } from '@/features/member/hooks/useMemberProfile';
 import { logoutAction } from '@/features/auth/action/auth';
 
 interface TopbarProps {
@@ -18,7 +18,7 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
-    const { data: profile, isLoading, isError } = useCustomerProfile();
+    const { data: profile, isLoading, isError } = useMemberProfile();
 
     const logoutMutation = useMutation({
         mutationFn: async () => {

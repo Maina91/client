@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
-import type { CustomerProfile } from '@/core/types/customer-profile'
-import { clientProfileAction } from '@/core/actions/customer/profile'
+import { MemberProfileAction } from '../action/profile';
+import type { MemberProfile } from '../types/memberProfile';
 
 
 const CUSTOMER_PROFILE_QUERY_KEY = ['customer', 'clientProfile'];
 
-export const useCustomerProfile = () => {
-    return useQuery<CustomerProfile, Error>({
+export const useMemberProfile = () => {
+    return useQuery<MemberProfile, Error>({
         queryKey: CUSTOMER_PROFILE_QUERY_KEY,
         queryFn: async () => {
             try {
-                const res = await clientProfileAction()
+                const res = await MemberProfileAction()
                 return res.profile
             } catch (err: any) {
                 const error = err?.message ?? ''
