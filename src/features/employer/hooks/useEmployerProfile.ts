@@ -2,12 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { EmployerProfileAction } from '../action/profile'
 import type { EmployerProfile } from '../types/profile'
 
+const EMPLOYER_PROFILE_QUERY_KEY = ['employer', 'profile']
 
-const CUSTOMER_PROFILE_QUERY_KEY = ['customer', 'clientProfile']
-
-export const useMemberProfile = () => {
-  return useQuery<EmployerProfile, Error>({
-    queryKey: CUSTOMER_PROFILE_QUERY_KEY,
+export const useEmployerProfile = () => {
+  return useQuery({
+    queryKey: EMPLOYER_PROFILE_QUERY_KEY,
     queryFn: async () => {
       try {
         const res = await EmployerProfileAction()

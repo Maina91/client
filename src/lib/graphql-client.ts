@@ -1,6 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
+import { API_URL } from './config/envConfig'
 
-const endpoint = 'http://localhost:4000/graphql'
+const endpoint = API_URL || 'http://localhost:4000/api'
 
 // Create a function to get a fresh client instance (important for SSR)
 export const getGraphQLClient = (token?: string | null) => {

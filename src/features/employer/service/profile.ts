@@ -1,7 +1,7 @@
 import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
-export interface MemberProfileResponse {
+export interface EmployerProfileResponse {
   profile: {
     member_no: string
     first_name: string
@@ -17,7 +17,7 @@ export interface MemberProfileResponse {
 
 export async function EmployerProfileService(
   token: string,
-): Promise<MemberProfileResponse> {
+): Promise<EmployerProfileResponse> {
   try {
     if (!token) throw new Error('Unauthorized')
 
@@ -26,8 +26,8 @@ export async function EmployerProfileService(
 
     const response = await sdk.GetMemberProfile()
 
-    // if (!response.memberProfile) {
-    //   throw new Error('Unable to fetch member profile')
+    // if (!response.employerProfile) {
+    //   throw new Error('Unable to fetch employer profile')
     // }
 
     return response.memberProfile
