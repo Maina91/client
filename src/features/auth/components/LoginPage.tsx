@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
 import { loginSchema } from '../schema/auth.schema'
 import { loginAction } from '../action/auth'
-import type { LoginData } from '../schema/auth.schema'
+import type { LoginData } from '../types/auth'
 import type { LoginUserTypeInput } from "@/generated/graphql"
 import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
@@ -39,7 +39,7 @@ export function LoginPage() {
     onError: (err: any) => {
       if (err?.fieldErrors) {
         Object.entries(err.fieldErrors).forEach(([field, message]) => {
-          form.setFieldMeta(field as keyof LoginData, (meta) => ({
+          form.setFieldMeta(field as keyof typeof form.state.values, (meta) => ({
             ...meta,
             errors: [String(message)],
           }))
@@ -55,9 +55,9 @@ export function LoginPage() {
 
   const form = useForm({
     defaultValues: {
-      email_address: '',
+      username: '',
       password: '',
-      user_type: 'Member' as LoginUserTypeInput,
+      user_type: 'member' as LoginUserTypeInput,
     },
     validators: {
       onSubmit: loginSchema,
@@ -100,7 +100,7 @@ export function LoginPage() {
                     className="flex gap-4 mt-2"
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="MEMBER" id="member" />
+                      <RadioGroupItem value="member" id="member" />
                       <Label htmlFor="member">Member</Label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -123,22 +123,22 @@ export function LoginPage() {
             </form.Field>
 
             <form.Field
-              name="email_address"
+              name="username"
               validators={{
                 onChangeAsyncDebounceMs: 500,
-                onChangeAsync: loginSchema.shape.email_address,
+                onChangeAsync: loginSchema.shape.username,
               }}
             >
               {(field) => (
                 <div className="space-y-1.5">
-                  <Label htmlFor="email_address">Email address</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
                     id={field.name}
                     name={field.name}
-                    type="email"
-                    placeholder="Enter email address"
+                    type="text"
+                    placeholder="Enter email, username, or ID number"
                     value={field.state.value}
-                    autoComplete="email"
+                    autoComplete="username"
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     aria-invalid={field.state.meta.errors.length > 0}

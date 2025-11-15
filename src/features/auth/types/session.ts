@@ -1,10 +1,9 @@
-import type { UserType } from '../schema/auth.schema'
+import type { LoginUserTypeInput } from "@/generated/graphql"
 
 export type SessionUser = {
     member_no: string | null
-    email: string
-    role: UserType
-    custom_ref?: string
+    username: string
+    role: LoginUserTypeInput
 }
 
 export type SessionData = {

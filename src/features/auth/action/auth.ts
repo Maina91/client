@@ -16,7 +16,7 @@ export const loginAction = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     try {
       const response = await loginUserService({
-        username: data.email_address,
+        username: data.username,
         password: data.password,
         user_type: data.user_type,
       })
@@ -32,7 +32,7 @@ export const loginAction = createServerFn({ method: 'POST' })
       const csrf = generateCsrfToken()
       const user: SessionUser = {
         member_no: null,
-        email: data.email_address,
+        username: data.username,
         role: data.user_type,
       }
 
