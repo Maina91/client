@@ -22,15 +22,17 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp'
-import { env } from '@/env'
 import { useSession } from '@/features/auth/hooks/useSession'
+import { OTP_MAX_RETRIES, OTP_RESEND_INTERVAL } from '@/lib/config/envConfig'
 
 function getErrorMessages(errors: Array<any>): Array<string> {
   return errors.map((err) => (typeof err === 'string' ? err : err.message))
 }
 
-export function VerifyOptPage() {
+export function VerifyOtpPage() {
   const router = useRouter()
+  const search = useSearch({ from: '/_auth/verify-otp' })
+  const context = search.context || 'login'
 
   // check for user /agent
   const { session, isLoading, isAuthed } = useSession()
@@ -52,15 +54,35 @@ export function VerifyOptPage() {
 
   const userRole: UserType = session.role
 
+  // Dynamic content based on context
+  const getContent = () => {
+    switch (context) {
+      case 'reset':
+        return {
+          title: 'Reset Password',
+          description: 'We have sent a 6-digit code to your email. Please enter it to reset your password.',
+          successMessage: 'Password reset OTP verified successfully',
+          buttonText: 'Reset Password',
+        }
+      case 'login':
+      default:
+        return {
+          title: 'Verify Your Account',
+          description: 'We have sent a 6-digit code to your email/phone. Please enter it to verify your account.',
+          successMessage: 'OTP Verified Successfully',
+          buttonText: 'Verify OTP',
+        }
+    }
+  }
+
+  const content = getContent()
+
   const [destination, setDestination] = useState<'EMAIL' | 'MOBILE'>('EMAIL')
   const [resendCooldown, setResendCooldown] = useState(0)
   const [resendCount, setResendCount] = useState(0)
 
   const userAgent =
     typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
-
-  const MAX_RESENDS = env.VITE_OTP_MAX_RETRIES
-  const RESEND_INTERVAL = env.VITE_OTP_RESEND_INTERVAL // seconds
 
   const form = useForm({
     defaultValues: {
@@ -93,7 +115,7 @@ export function VerifyOptPage() {
       } else {
         router.navigate({
           to:
-            userRole === 'MEMBER' ? '/dashboard/member' : '/dashboard/employer',
+            userRole === 'member' ? '/dashboard/member' : '/dashboard/employer',
         })
       }
     },
@@ -113,7 +135,7 @@ export function VerifyOptPage() {
       toast.success('OTP Resent', {
         description: 'A new OTP has been sent to your email/phone.',
       })
-      setResendCooldown(RESEND_INTERVAL)
+      setResendCooldown(OTP_RESEND_INTERVAL)
       setResendCount((prev) => prev + 1)
     },
     onError: (err: any) => {
@@ -138,11 +160,10 @@ export function VerifyOptPage() {
       <Card className="w-full max-w-md shadow-2xl rounded-2xl p-6">
         <CardHeader className="space-y-2">
           <CardTitle className="text-center text-xl font-bold tracking-tight">
-            Enter OTP
+            {content.title}
           </CardTitle>
           <p className="text-center text-muted-foreground text-sm">
-            We have sent a 6-digit code to your email/phone. Please enter it
-            below.
+            {content.description}
           </p>
         </CardHeader>
 
@@ -168,7 +189,21 @@ export function VerifyOptPage() {
                     name={field.name}
                     maxLength={6}
                     value={field.state.value}
-                    onChange={(val) => field.handleChange(val)}
+                    onChange={(val) => {
+                      field.handleChange(val)
+                      // Auto-submit when OTP is complete
+                      if (val.length === 6) {
+                        form.handleSubmit()
+                      }
+                    }}
+                    onPaste={(e) => {
+                      e.preventDefault()
+                      const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
+                      field.handleChange(pastedData)
+                      if (pastedData.length === 6) {
+                        form.handleSubmit()
+                      }
+                    }}
                     onBlur={field.handleBlur}
                     aria-invalid={field.state.meta.errors.length > 0}
                     aria-describedby={
@@ -177,6 +212,7 @@ export function VerifyOptPage() {
                         : undefined
                     }
                     className="mx-auto"
+                    autoFocus
                   >
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
@@ -227,7 +263,7 @@ export function VerifyOptPage() {
                       <span>Verifying...</span>
                     </>
                   ) : (
-                    'Verify OTP'
+                    content.buttonText
                   )}
                 </Button>
               )}
@@ -262,22 +298,30 @@ export function VerifyOptPage() {
                 </div>
               </RadioGroup>
 
-              <Button
-                type="button"
-                variant="link"
-                disabled={
-                  resendCooldown > 0 ||
-                  resendCount >= MAX_RESENDS ||
-                  resendMutation.isPending
-                }
-                onClick={() => resendMutation.mutate()}
-              >
-                {resendCooldown > 0
-                  ? `Resend OTP in ${resendCooldown}s`
-                  : resendCount >= MAX_RESENDS
-                    ? 'Maximum attempts reached'
-                    : 'Resend OTP'}
-              </Button>
+              <div className="flex flex-col items-center space-y-2">
+                <Button
+                  type="button"
+                  variant="link"
+                  disabled={
+                    resendCooldown > 0 ||
+                    resendCount >= OTP_MAX_RETRIES ||
+                    resendMutation.isPending
+                  }
+                  onClick={() => resendMutation.mutate()}
+                  className="text-sm"
+                >
+                  {resendCooldown > 0
+                    ? `Resend OTP in ${resendCooldown}s`
+                    : resendCount >= OTP_MAX_RETRIES
+                      ? 'Maximum attempts reached'
+                      : 'Resend OTP'}
+                </Button>
+                {resendCount >= OTP_MAX_RETRIES && (
+                  <p className="text-xs text-muted-foreground">
+                    Too many attempts. Please try again later.
+                  </p>
+                )}
+              </div>
             </div>
           </form>
         </CardContent>

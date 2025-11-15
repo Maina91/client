@@ -68,6 +68,19 @@ export const env = createEnv({
   clientPrefix: 'VITE_',
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
+    // Otp Config
+    VITE_OTP_MAX_RETRIES: z
+      .coerce
+      .number()
+      .positive()
+      .default(3)
+      .describe('Maximum OTP resend attempts'),
+    VITE_OTP_RESEND_INTERVAL: z
+      .coerce
+      .number()
+      .positive()
+      .default(60)
+      .describe('OTP resend cooldown interval in seconds'),
   },
   // runtimeEnv: import.meta.env,
   runtimeEnv: {

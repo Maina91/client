@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { VerifyOptPage } from '@/features/auth/components/VerifyOtpPage'
+import { VerifyOtpPage } from '@/features/auth/components/VerifyOtpPage'
 import {
   clearUserSession,
   getUSerSession,
@@ -19,5 +19,5 @@ export const Route = createFileRoute('/_auth/verify-otp')({
   
       return { session: res.user }
     },
-  component: VerifyOptPage,
+  component: VerifyOtpPage,
 })
