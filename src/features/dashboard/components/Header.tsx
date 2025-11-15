@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { Bell, ChevronDown, Menu } from 'lucide-react'
+import { AlertCircle, Bell, ChevronDown, LogOut, Menu, Settings, User } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { toast } from 'sonner'
-import type { UserType } from '@/features/auth/schema/auth.schema'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { useUserProfile } from '../hooks/useUserProfile'
+import { LoginUserTypeInput } from '@/generated/graphql'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { useMemberProfile } from '@/features/member/hooks/useMemberProfile'
+import { Skeleton } from '@/components/ui/skeleton'
 import { logoutAction } from '@/features/auth/action/auth'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface TopbarProps {
   onSidebarToggle?: () => void
@@ -18,7 +20,7 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const { data: profile, isLoading, isError } = useMemberProfile()
+  const { profile, isLoading, isError } = useUserProfile()
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -49,11 +51,11 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isDropdownOpen])
 
-  const handleProfileClick = (role: UserType) => {
+  const handleProfileClick = (userType: LoginUserTypeInput) => {
     setIsDropdownOpen(false)
     router.navigate({
       to:
-        role === 'MEMBER'
+        userType === LoginUserTypeInput.Member
           ? '/dashboard/member/profile'
           : '/dashboard/employer/profile',
     })
@@ -77,14 +79,13 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
 
         <div className="hidden sm:flex flex-col">
           <span className="text-xs text-gray-500">Welcome</span>
-          <span
-            className={clsx(
-              'font-semibold text-gray-800 text-sm sm:text-base',
-              isLoading && 'bg-gray-200 rounded w-24 h-5 animate-pulse',
-            )}
-          >
-            {!isLoading ? (profile?.full_name ?? 'User') : ''}
-          </span>
+          {isLoading ? (
+            <Skeleton className="w-24 h-5" />
+          ) : (
+            <span className="font-semibold text-gray-800 text-sm sm:text-base">
+              {profile?.displayName || 'User'}
+            </span>
+          )}
         </div>
       </div>
 
@@ -111,7 +112,7 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
           >
             <Avatar className="h-9 w-9">
               <AvatarFallback>
-                {profile?.full_name?.charAt(0).toUpperCase() ?? 'U'}
+                {profile?.avatarFallback || 'U'}
               </AvatarFallback>
             </Avatar>
             <ChevronDown
@@ -127,30 +128,49 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
               <div className="px-4 py-3 border-b bg-gray-50">
                 <p className="text-xs text-gray-500">Signed in as</p>
                 <p className="text-sm font-medium text-gray-800 truncate">
-                  {profile.email_address}
+                  {profile.email}
                 </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-xs text-gray-500 capitalize">
+                    {profile.userType === LoginUserTypeInput.Member ? 'Member' : 'Employer'}
+                  </span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {profile.userType === LoginUserTypeInput.Member ? 'Member' : 'Employer'}
+                  </span>
+                </div>
               </div>
               <div className="flex flex-col">
                 <button
-                  className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition"
-                  onClick={() =>
-                    handleProfileClick(profile.user_type as UserType)
-                  }
+                  className="flex items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-100 transition"
+                  onClick={() => handleProfileClick(profile.userType)}
+                  aria-label="Go to profile"
                 >
+                  <User className="w-4 h-4" />
                   Profile
                 </button>
-                <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
+                <button className="flex items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
+                  <Settings className="w-4 h-4" />
                   Settings
                 </button>
                 <button
                   onClick={() => logoutMutation.mutate()}
                   disabled={logoutMutation.isPending}
-                  className="px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+                  className="flex items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+                  aria-label="Logout"
                 >
+                  <LogOut className="w-4 h-4" />
                   {logoutMutation.isPending ? 'Logging out…' : 'Logout'}
                 </button>
               </div>
             </div>
+          )}
+
+          {isError && (
+            <Alert>
+              <AlertDescription>
+                Failed to load profile
+              </AlertDescription>
+            </Alert>
           )}
         </div>
       </div>
