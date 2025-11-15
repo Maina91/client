@@ -1,0 +1,15 @@
+query GetEmployerProfile {
+  employerProfile {
+    profile {
+      member_no
+      first_name
+      last_name
+      email
+      phone
+      date_of_birth
+      address
+    }
+    status_code
+    message
+  }
+}
