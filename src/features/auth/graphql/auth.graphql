@@ -3,3 +3,17 @@ mutation Login($username: String!, $password: String!, $user_type: LoginUserType
     accessToken
   }
 }
+
+mutation ForgotPassword($username: String!, $user_type: LoginUserTypeInput!) {
+  forgotPassword(username: $username, user_type: $user_type) {
+    message
+    success
+  }
+}
+
+mutation ResetPassword($password: String!) {
+  resetPassword(password: $password) {
+    message
+    success
+  }
+}

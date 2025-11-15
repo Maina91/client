@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loginUserService } from '../service/authService'
-import { loginSchema } from '../schema/auth.schema'
+import { forgotPasswordService, loginUserService, resetPasswordService } from '../service/authService'
+import { forgotPasswordSchema, loginSchema, resetPasswordSchema } from '../schema/auth.schema'
 import type { SessionUser } from '../types/session'
 import { useAppSession } from '@/lib/session';
 import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
@@ -115,35 +115,65 @@ export const logoutAction = createServerFn({ method: 'POST' })
 //     }
 //   })
 
-// export const resetPassword = createServerFn({ method: 'POST' })
-//     .middleware([authRateLimitMiddleware])
-//     .inputValidator(resetPasswordSchema)
-//     .handler(async ({ data }) => {
-//         try {
-//             const res = await resetPasswordService(data)
+export const forgotPasswordAction = createServerFn({ method: 'POST' })
+  .middleware([authRateLimitMiddleware])
+  .inputValidator(forgotPasswordSchema)
+  .handler(async ({ data }) => {
+    try {
+      const res = await forgotPasswordService(data)
 
-//       const session = await useAppSession()
-//       await session.update({
-//         is_authed: false,
-//         user: {
-//           member_no: null,
-//           email: data.email,
-//           role: 'MEMBER',
-//         },
-//       })
+      const session = await useAppSession()
+      await session.update({
+        is_authed: false,
+        otp_token: 'temp_token', // Temporary token for OTP flow
+        user: {
+          member_no: null,
+          username: data.username,
+          role: data.user_type,
+        },
+      })
 
-//       return {
-//         success: true,
-//         message: res.message,
-//         member_status: 'pending',
-//       }
-//     } catch (err: any) {
-//       throw {
-//         message: err?.message ?? 'Reset password failed',
-//         fieldErrors: err?.fieldErrors ?? null,
-//       }
-//     }
-//   })
+      return {
+        success: true,
+        message: res.message,
+        otp_generated: true,
+      }
+    } catch (err: any) {
+      throw {
+        message: err?.message ?? 'Forgot password request failed',
+        fieldErrors: err?.fieldErrors ?? null,
+      }
+    }
+  })
+
+export const resetPasswordAction = createServerFn({ method: 'POST' })
+  .middleware([authRateLimitMiddleware, authMiddleware, csrfMiddleware])
+  .inputValidator(resetPasswordSchema)
+  .handler(async ({ context, data }) => {
+    try {
+      const user = context
+      const auth_token = user.authToken
+
+      if (!auth_token) {
+        throw new Response('Unauthorized', { status: 401 })
+      }
+
+      const res = await resetPasswordService(data.password, auth_token)
+
+      const session = await useAppSession()
+      await session.clear()
+
+      return {
+        success: true,
+        message: res.message,
+      }
+    } catch (err: any) {
+      throw {
+        message: err?.message ?? 'Reset password failed',
+        fieldErrors: err?.fieldErrors ?? null,
+      }
+    }
+  })
 
 // export const updatePassword = createServerFn({ method: 'POST' })
 //     .middleware([authRateLimitMiddleware, csrfMiddleware])

@@ -1,5 +1,6 @@
 import type { LoginData } from '../types/auth'
 import type { LoginMutation } from '@/generated/graphql'
+import type { ForgotPasswordData } from '../schema/auth.schema'
 import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
@@ -45,26 +46,51 @@ export async function loginUserService(
 //   }
 // }
 
-// export async function resetPasswordService(
-//   data: ResetPasswordData,
-//   token?: string | null,
-// ): Promise<ResetPasswordResponse> {
-//   try {
-//     const client = getGraphQLClient(token)
-//     const sdk = getSdk(client)
+export async function forgotPasswordService(
+  data: ForgotPasswordData,
+): Promise<{ message: string; success: boolean }> {
+  try {
+    const client = getGraphQLClient()
+    const sdk = getSdk(client)
 
-//     const response = await sdk.ResetPassword({ input: data })
+    const response = await sdk.ForgotPassword({
+      username: data.username,
+      user_type: data.user_type,
+    })
 
-//     if (!response.resetPassword) {
-//       throw new Error('Reset password failed')
-//     }
+    if (!response.forgotPassword) {
+      throw new Error('Forgot password request failed')
+    }
 
-//     return response.resetPassword
-//   } catch (error) {
-//     handleGraphQLError(error)
-//     throw error
-//   }
-// }
+    return response.forgotPassword
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
+
+export async function resetPasswordService(
+  password: string,
+  token: string,
+): Promise<{ message: string; success: boolean }> {
+  try {
+    const client = getGraphQLClient(token)
+    const sdk = getSdk(client)
+
+    const response = await sdk.ResetPassword({
+      password,
+    })
+
+    if (!response.resetPassword) {
+      throw new Error('Reset password failed')
+    }
+
+    return response.resetPassword
+  } catch (error) {
+    handleGraphQLError(error)
+    throw error
+  }
+}
 
 // export async function updatePasswordService(
 //   data: UpdatePasswordData,
