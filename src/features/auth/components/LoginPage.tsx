@@ -6,13 +6,15 @@ import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
 import { loginSchema } from '../schema/auth.schema'
 import { loginAction } from '../action/auth'
-import type { LoginData, UserType } from '../schema/auth.schema'
+import type { LoginData } from '../schema/auth.schema'
+import type { LoginUserTypeInput } from "@/generated/graphql"
 import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
 
 function getErrorMessages(errors: Array<any>): Array<string> {
   return errors.map((err) => (typeof err === 'string' ? err : err.message))
@@ -27,8 +29,7 @@ export function LoginPage() {
     onSuccess: (res) => {
       toast.success('Successful login', {
         description:
-          res.message ||
-          'Logged in successfully. Proceed to verify the code sent to your email/ Mobile no',
+          res.message,
       })
       router.navigate({
         to: '/verify-otp',
@@ -46,7 +47,7 @@ export function LoginPage() {
       }
 
       toast.error('Login Error', {
-        description: err?.message || 'An unexpected error occurred',
+        description: err?.message || 'An unexpected error occurred. Please try again later.',
         richColors: true,
       })
     },
@@ -56,7 +57,7 @@ export function LoginPage() {
     defaultValues: {
       email_address: '',
       password: '',
-      user_type: 'member' as UserType,
+      user_type: 'Member' as LoginUserTypeInput,
     },
     validators: {
       onSubmit: loginSchema,

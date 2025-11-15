@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '../service/authService'
-import { loginSchema, resetPasswordSchema, updatePasswordSchema } from '../schema/auth.schema'
+import { loginUserService } from '../service/authService'
+import { loginSchema } from '../schema/auth.schema'
 import type { SessionUser } from '../types/session'
 import { useAppSession } from '@/lib/session';
 import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
@@ -11,18 +11,19 @@ import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
-    .middleware([authRateLimitMiddleware])
-    .inputValidator(loginSchema)
-    .handler(async ({ data }) => {
-        try {
+  .middleware([authRateLimitMiddleware])
+  .inputValidator(loginSchema)
+  .handler(async ({ data }) => {
+    try {
       const response = await loginUserService({
-        email: data.email_address,
+        username: data.email_address,
         password: data.password,
+        user_type: data.user_type,
       })
 
-      if (!response.access_token) {
+      if (!response.login.accessToken) {
         throw new Error('An error occurred')
-            }
+      }
 
       const session = await useAppSession()
       await session.clear()
@@ -37,7 +38,7 @@ export const loginAction = createServerFn({ method: 'POST' })
 
       await session.update({
         is_authed: true,
-        otp_token: response.access_token,
+        otp_token: response.login.accessToken,
         user: user,
         lastTouch: now,
         createdAt: now,
@@ -59,93 +60,93 @@ export const loginAction = createServerFn({ method: 'POST' })
     }
   })
 
-export const logoutAction = createServerFn({ method: 'POST' })
-  .middleware([authMiddleware, csrfMiddleware])
-  .handler(async ({ context }) => {
-    try {
-      const user = context
-      const auth_token = user.authToken
+// export const logoutAction = createServerFn({ method: 'POST' })
+//   .middleware([authMiddleware, csrfMiddleware])
+//   .handler(async ({ context }) => {
+//     try {
+//       const user = context
+//       const auth_token = user.authToken
 
-      if (!auth_token) {
-        throw new Response('Unauthorized', { status: 401 })
-      }
+//       if (!auth_token) {
+//         throw new Response('Unauthorized', { status: 401 })
+//       }
 
-      const res = await logoutUserService(auth_token)
-      const session = await useAppSession()
-      await session.clear()
+//       const res = await logoutUserService(auth_token)
+//       const session = await useAppSession()
+//       await session.clear()
 
-      return {
-        success: true,
-        message: 'Logged out successfully',
-      }
-    } catch (err: any) {
-      const session = await useAppSession()
-      await session.clear()
+//       return {
+//         success: true,
+//         message: 'Logged out successfully',
+//       }
+//     } catch (err: any) {
+//       const session = await useAppSession()
+//       await session.clear()
 
-      throw {
-        message: err?.message ?? 'Logged out successfully',
-      }
-    }
-  })
+//       throw {
+//         message: err?.message ?? 'Logged out successfully',
+//       }
+//     }
+//   })
 
-export const resetPassword = createServerFn({ method: 'POST' })
-    .middleware([authRateLimitMiddleware])
-    .inputValidator(resetPasswordSchema)
-    .handler(async ({ data }) => {
-        try {
-            const res = await resetPasswordService(data)
+// export const resetPassword = createServerFn({ method: 'POST' })
+//     .middleware([authRateLimitMiddleware])
+//     .inputValidator(resetPasswordSchema)
+//     .handler(async ({ data }) => {
+//         try {
+//             const res = await resetPasswordService(data)
 
-      const session = await useAppSession()
-      await session.update({
-        is_authed: false,
-        user: {
-          member_no: null,
-          email: data.email,
-          role: 'MEMBER',
-        },
-      })
+//       const session = await useAppSession()
+//       await session.update({
+//         is_authed: false,
+//         user: {
+//           member_no: null,
+//           email: data.email,
+//           role: 'MEMBER',
+//         },
+//       })
 
-      return {
-        success: true,
-        message: res.message,
-        member_status: 'pending',
-      }
-    } catch (err: any) {
-      throw {
-        message: err?.message ?? 'Reset password failed',
-        fieldErrors: err?.fieldErrors ?? null,
-      }
-    }
-  })
+//       return {
+//         success: true,
+//         message: res.message,
+//         member_status: 'pending',
+//       }
+//     } catch (err: any) {
+//       throw {
+//         message: err?.message ?? 'Reset password failed',
+//         fieldErrors: err?.fieldErrors ?? null,
+//       }
+//     }
+//   })
 
-export const updatePassword = createServerFn({ method: 'POST' })
-    .middleware([authRateLimitMiddleware, csrfMiddleware])
-    .inputValidator(updatePasswordSchema)
-    .handler(async ({ context, data }) => {
-        try {
-      const user = context
-      const login_token = user?.authToken
+// export const updatePassword = createServerFn({ method: 'POST' })
+//     .middleware([authRateLimitMiddleware, csrfMiddleware])
+//     .inputValidator(updatePasswordSchema)
+//     .handler(async ({ context, data }) => {
+//         try {
+//       const user = context
+//       const login_token = user?.authToken
 
-      if (!login_token) {
-        throw new Response('Unauthorized', { status: 401 })
-      }
+//       if (!login_token) {
+//         throw new Response('Unauthorized', { status: 401 })
+//       }
 
-      const res = await updatePasswordService(login_token, {
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
-      })
+//       const res = await updatePasswordService(login_token, {
+//         currentPassword: data.currentPassword,
+//         newPassword: data.newPassword,
+//       })
 
-      const session = await useAppSession()
-      await session.clear()
+//       const session = await useAppSession()
+//       await session.clear()
 
-      return {
-        success: true,
-        message: res.message,
-      }
-    } catch (err: any) {
-      throw {
-        message: err?.message ?? 'Reset password failed',
-        fieldErrors: err?.fieldErrors ?? null,
-      }
-    }
-  })
+//       return {
+//         success: true,
+//         message: res.message,
+//       }
+//     } catch (err: any) {
+//       throw {
+//         message: err?.message ?? 'Reset password failed',
+//         fieldErrors: err?.fieldErrors ?? null,
+//       }
+//     }
+//   })

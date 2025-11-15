@@ -1,30 +1,19 @@
-export interface LoginResponse {
-  status: number
-  status_code: number
-  message: string
-  otp_generated: string
-  token: string
-  member_status: number
+import type { LoginUserTypeInput } from "@/generated/graphql"
+
+export interface LoginData {
+  username: string
+  password: string
+  user_type: LoginUserTypeInput
 }
 
-export interface LogoutResponse {
-  status: number
-  message: string
-}
+// export interface ResetPasswordData {
+//   email: string
+// }
 
-export interface ResetPasswordResponse {
-  status_code: number
-  message?: string
-  customer_ref?: string
-  token?: string
-  member_status?: number
-  member_token?: string
-  member_no?: string
-}
+// export interface UpdatePasswordData {
+//   currentPassword: string
+//   newPassword: string
+// }
 
-export interface UpdatePasswordResponse {
-  status_code: number
-  message?: string
-}
 
 
