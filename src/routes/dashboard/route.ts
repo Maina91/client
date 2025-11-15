@@ -5,7 +5,7 @@ import {
   getUSerSession,
 } from '@/features/auth/action/session'
 
-export const Route = createFileRoute('/dashboard/_layout')({
+export const Route = createFileRoute('/dashboard')({
   beforeLoad: async ({ location }) => {
     const res = await getUSerSession()
 

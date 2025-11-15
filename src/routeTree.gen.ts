@@ -8,12 +8,10 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -26,9 +24,7 @@ import { Route as DashboardMemberAccountsRouteImport } from './routes/dashboard/
 import { Route as DashboardEmployerProfileRouteImport } from './routes/dashboard/employer/profile'
 import { Route as DashboardEmployerEmployeesRouteImport } from './routes/dashboard/employer/employees'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
@@ -36,16 +32,12 @@ const DashboardRoute = DashboardRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/_public/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
-  id: '/_layout',
-  getParentRoute: () => DashboardRoute,
 } as any)
 const AuthVerifyOtpRoute = AuthVerifyOtpRouteImport.update({
   id: '/_auth/verify-otp',
@@ -70,48 +62,48 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
 const DashboardMemberIndexRoute = DashboardMemberIndexRouteImport.update({
   id: '/member/',
   path: '/member/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardEmployerIndexRoute = DashboardEmployerIndexRouteImport.update({
   id: '/employer/',
   path: '/employer/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMemberProfileRoute = DashboardMemberProfileRouteImport.update({
   id: '/member/profile',
   path: '/member/profile',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMemberContributionsRoute =
   DashboardMemberContributionsRouteImport.update({
     id: '/member/contributions',
     path: '/member/contributions',
-    getParentRoute: () => DashboardRoute,
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardMemberAccountsRoute = DashboardMemberAccountsRouteImport.update({
   id: '/member/accounts',
   path: '/member/accounts',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardEmployerProfileRoute =
   DashboardEmployerProfileRouteImport.update({
     id: '/employer/profile',
     path: '/employer/profile',
-    getParentRoute: () => DashboardRoute,
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardEmployerEmployeesRoute =
   DashboardEmployerEmployeesRouteImport.update({
     id: '/employer/employees',
     path: '/employer/employees',
-    getParentRoute: () => DashboardRoute,
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
-  '/dashboard': typeof DashboardLayoutRoute
   '/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
@@ -127,8 +119,8 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/': typeof PublicIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
   '/dashboard/employer/profile': typeof DashboardEmployerProfileRoute
   '/dashboard/member/accounts': typeof DashboardMemberAccountsRoute
@@ -139,12 +131,11 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/dashboard/_layout': typeof DashboardLayoutRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/employer/employees': typeof DashboardEmployerEmployeesRoute
@@ -158,11 +149,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/dashboard'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
     | '/verify-otp'
-    | '/dashboard'
     | '/'
     | '/dashboard/'
     | '/dashboard/employer/employees'
@@ -178,8 +169,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/verify-otp'
-    | '/dashboard'
     | '/'
+    | '/dashboard'
     | '/dashboard/employer/employees'
     | '/dashboard/employer/profile'
     | '/dashboard/member/accounts'
@@ -189,12 +180,11 @@ export interface FileRouteTypes {
     | '/dashboard/member'
   id:
     | '__root__'
+    | '/dashboard'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/reset-password'
     | '/_auth/verify-otp'
-    | '/dashboard'
-    | '/dashboard/_layout'
     | '/_public/'
     | '/dashboard/'
     | '/dashboard/employer/employees'
@@ -207,11 +197,11 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
@@ -221,7 +211,7 @@ declare module '@tanstack/react-router' {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -229,7 +219,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/_public/': {
       id: '/_public/'
@@ -237,13 +227,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/_layout': {
-      id: '/dashboard/_layout'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardLayoutRouteImport
-      parentRoute: typeof DashboardRoute
     }
     '/_auth/verify-otp': {
       id: '/_auth/verify-otp'
@@ -278,55 +261,54 @@ declare module '@tanstack/react-router' {
       path: '/member'
       fullPath: '/dashboard/member'
       preLoaderRoute: typeof DashboardMemberIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/employer/': {
       id: '/dashboard/employer/'
       path: '/employer'
       fullPath: '/dashboard/employer'
       preLoaderRoute: typeof DashboardEmployerIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/member/profile': {
       id: '/dashboard/member/profile'
       path: '/member/profile'
       fullPath: '/dashboard/member/profile'
       preLoaderRoute: typeof DashboardMemberProfileRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/member/contributions': {
       id: '/dashboard/member/contributions'
       path: '/member/contributions'
       fullPath: '/dashboard/member/contributions'
       preLoaderRoute: typeof DashboardMemberContributionsRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/member/accounts': {
       id: '/dashboard/member/accounts'
       path: '/member/accounts'
       fullPath: '/dashboard/member/accounts'
       preLoaderRoute: typeof DashboardMemberAccountsRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/employer/profile': {
       id: '/dashboard/employer/profile'
       path: '/employer/profile'
       fullPath: '/dashboard/employer/profile'
       preLoaderRoute: typeof DashboardEmployerProfileRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/employer/employees': {
       id: '/dashboard/employer/employees'
       path: '/employer/employees'
       fullPath: '/dashboard/employer/employees'
       preLoaderRoute: typeof DashboardEmployerEmployeesRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
   }
 }
 
-interface DashboardRouteChildren {
-  DashboardLayoutRoute: typeof DashboardLayoutRoute
+interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardEmployerEmployeesRoute: typeof DashboardEmployerEmployeesRoute
   DashboardEmployerProfileRoute: typeof DashboardEmployerProfileRoute
@@ -337,8 +319,7 @@ interface DashboardRouteChildren {
   DashboardMemberIndexRoute: typeof DashboardMemberIndexRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardLayoutRoute: DashboardLayoutRoute,
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardEmployerEmployeesRoute: DashboardEmployerEmployeesRoute,
   DashboardEmployerProfileRoute: DashboardEmployerProfileRoute,
@@ -349,16 +330,16 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardMemberIndexRoute: DashboardMemberIndexRoute,
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
 }
 export const routeTree = rootRouteImport
