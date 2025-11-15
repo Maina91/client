@@ -132,6 +132,25 @@ export type LoginMutation = (
   ) }
 );
 
+export type EmployeesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmployeesQuery = (
+  { __typename?: 'Query' }
+  & { employees: Array<(
+    { __typename?: 'Employees' }
+    & Pick<
+      Employees,
+      | 'member_no'
+      | 'first_name'
+      | 'last_name'
+      | 'all_names'
+      | 'id_no'
+      | 'pin_no'
+    >
+  )> }
+);
+
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -158,6 +177,18 @@ export const LoginDocument = gql`
   }
 }
     `;
+export const EmployeesDocument = gql`
+    query Employees {
+  employees {
+    member_no
+    first_name
+    last_name
+    all_names
+    id_no
+    pin_no
+  }
+}
+    `;
 export const ProfileDocument = gql`
     query Profile {
   profile {
@@ -179,6 +210,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     Login(variables: LoginMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<LoginMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>({ document: LoginDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Login', 'mutation', variables);
+    },
+    Employees(variables?: EmployeesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<EmployeesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<EmployeesQuery>({ document: EmployeesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Employees', 'query', variables);
     },
     Profile(variables?: ProfileQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<ProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ProfileQuery>({ document: ProfileDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Profile', 'query', variables);

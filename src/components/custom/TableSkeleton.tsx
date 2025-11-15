@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export function ListSkeleton() {
+export function TableSkeleton() {
   return (
     <div className="space-y-2">
       <Skeleton className="relative h-4 w-60 rounded-md overflow-hidden">

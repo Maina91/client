@@ -1,0 +1,10 @@
+query Employees {
+  employees {
+    member_no
+    first_name
+    last_name
+    all_names
+    id_no
+    pin_no
+  }
+}
