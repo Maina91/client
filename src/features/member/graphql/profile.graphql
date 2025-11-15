@@ -1,15 +1,12 @@
-query GetMemberProfile {
-  memberProfile {
-    profile {
-      member_no
-      first_name
-      last_name
-      email
-      phone
-      date_of_birth
-      address
-    }
-    status_code
-    message
-  }
-}
+# Temporarily commented out until schema supports member profile fields
+# query GetMemberProfile {
+#   profile {
+#     member_no
+#     first_name
+#     last_name
+#     email
+#     phone
+#     date_of_birth
+#     address
+#   }
+# }

@@ -11,24 +11,18 @@ export async function EmployerProfileService(
     const client = getGraphQLClient(token)
     const sdk = getSdk(client)
 
-    // Using GetMemberProfile as placeholder until Profile query is generated
-    const response = await sdk.GetMemberProfile()
+    const response = await sdk.Profile()
 
-    // return {
-    //   status_code: response.memberProfile.status_code,
-    //   success: true,
-    //   profile: {
-    //     company_name: 'Placeholder Company',
-    //     email: 'placeholder@company.com',
-    //     pin_no: '123456789',
-    //     company_code: 'COMP001',
-    //     logo: undefined,
-    //   },
-    // }
     return {
       status_code: 200,
       success: true,
-      profile: response.profile,
+      profile: {
+        company_name: response.profile.company_name || '',
+        email: response.profile.email || '',
+        pin_no: response.profile.pin_no || '',
+        company_code: response.profile.company_code || '',
+        logo: response.profile.logo || undefined,
+      },
     }
   } catch (error) {
     handleGraphQLError(error)

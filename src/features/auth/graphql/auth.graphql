@@ -1,31 +1,5 @@
-mutation Login($input: LoginInput!) {
-  login(input: $input) {
-    access_token
-    refresh_token
-    user {
-      id
-      email
-      role
-    }
-  }
-}
-
-mutation Logout {
-  logout {
-    success
-  }
-}
-
-mutation ResetPassword($input: ResetPasswordInput!) {
-  resetPassword(input: $input) {
-    success
-    message
-  }
-}
-
-mutation UpdatePassword($input: UpdatePasswordInput!) {
-  updatePassword(input: $input) {
-    success
-    message
+mutation Login($username: String!, $password: String!, $user_type: LoginUserTypeInput!) {
+  login(username: $username, password: $password, user_type: $user_type) {
+    accessToken
   }
 }

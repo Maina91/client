@@ -1,14 +1,15 @@
-mutation VerifyOtp($input: VerifyOtpInput!) {
-  verifyOtp(input: $input) {
-    token
-    message
-    member_status
-    accounts_count
-  }
-}
+# Temporarily commented out until schema supports these mutations
+# mutation VerifyOtp($input: VerifyOtpInput!) {
+#   verifyOtp(input: $input) {
+#     token
+#     message
+#     member_status
+#     accounts_count
+#   }
+# }
 
-mutation ResendOtp($input: ResendOtpInput!) {
-  resendOtp(input: $input) {
-    message
-  }
-}
+# mutation ResendOtp($input: ResendOtpInput!) {
+#   resendOtp(input: $input) {
+#     message
+#   }
+# }

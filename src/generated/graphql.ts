@@ -1,330 +1,141 @@
-export type Maybe<T> = T | null
-export type InputMaybe<T> = Maybe<T>
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
-}
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>
-}
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>
-}
-export type MakeEmpty<
-  T extends { [key: string]: unknown },
-  K extends keyof T,
-> = { [_ in K]?: never }
-export type Incremental<T> =
-  | T
-  | {
-      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never
-    }
+import { GraphQLClient, RequestOptions } from 'graphql-request';
+import gql from 'graphql-tag';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string }
-  String: { input: string; output: string }
-  Boolean: { input: boolean; output: boolean }
-  Int: { input: number; output: number }
-  Float: { input: number; output: number }
-  DateTime: { input: any; output: any }
-  JSON: { input: any; output: any }
-}
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+};
 
-export type LoginInput = {
-  email: Scalars['String']['input']
-  password: Scalars['String']['input']
-}
+export type Employees = {
+  __typename?: 'Employees';
+  all_names?: Maybe<Scalars['String']['output']>;
+  first_name?: Maybe<Scalars['String']['output']>;
+  id_no?: Maybe<Scalars['String']['output']>;
+  last_name?: Maybe<Scalars['String']['output']>;
+  member_no?: Maybe<Scalars['String']['output']>;
+  pin_no?: Maybe<Scalars['String']['output']>;
+};
 
-export type LoginResponse = {
-  __typename?: 'LoginResponse'
-  access_token: Scalars['String']['output']
-  refresh_token: Scalars['String']['output']
-  user: User
-}
+export type Login = {
+  __typename?: 'Login';
+  accessToken: Scalars['String']['output'];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
 
-export type LogoutResponse = {
-  __typename?: 'LogoutResponse'
-  success: Scalars['Boolean']['output']
-}
-
-export type MemberProfile = {
-  __typename?: 'MemberProfile'
-  profile: MemberProfileData
-  status_code: Scalars['Int']['output']
-  message: Scalars['String']['output']
-}
-
-export type MemberProfileData = {
-  __typename?: 'MemberProfileData'
-  member_no: Scalars['String']['output']
-  first_name: Scalars['String']['output']
-  last_name: Scalars['String']['output']
-  email: Scalars['String']['output']
-  phone: Scalars['String']['output']
-  date_of_birth: Scalars['String']['output']
-  address: Scalars['String']['output']
+export enum LoginUserTypeInput {
+  Employer = 'employer',
+  Member = 'member'
 }
 
 export type Mutation = {
-  __typename?: 'Mutation'
-  login: LoginResponse
-  logout: LogoutResponse
-  resetPassword: ResetPasswordResponse
-  updatePassword: UpdatePasswordResponse
-}
+  __typename?: 'Mutation';
+  /** Login Resource */
+  login: Login;
+};
+
 
 export type MutationLoginArgs = {
-  input: LoginInput
-}
+  password: Scalars['String']['input'];
+  user_type: LoginUserTypeInput;
+  username: Scalars['String']['input'];
+};
 
-export type MutationResetPasswordArgs = {
-  input: ResetPasswordInput
-}
-
-export type MutationUpdatePasswordArgs = {
-  input: UpdatePasswordInput
-}
+export type Profile = {
+  __typename?: 'Profile';
+  company_code?: Maybe<Scalars['String']['output']>;
+  company_name?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  logo?: Maybe<Scalars['String']['output']>;
+  pin_no?: Maybe<Scalars['String']['output']>;
+};
 
 export type Query = {
-  __typename?: 'Query'
-  memberProfile: MemberProfile
-}
-
-export type ResetPasswordInput = {
-  email: Scalars['String']['input']
-}
-
-export type ResetPasswordResponse = {
-  __typename?: 'ResetPasswordResponse'
-  success: Scalars['Boolean']['output']
-  message: Scalars['String']['output']
-}
-
-export type UpdatePasswordInput = {
-  currentPassword: Scalars['String']['input']
-  newPassword: Scalars['String']['input']
-}
-
-export type UpdatePasswordResponse = {
-  __typename?: 'UpdatePasswordResponse'
-  success: Scalars['Boolean']['output']
-  message: Scalars['String']['output']
-}
-
-export type User = {
-  __typename?: 'User'
-  id: Scalars['ID']['output']
-  email: Scalars['String']['output']
-  role: Scalars['String']['output']
-}
+  __typename?: 'Query';
+  /** List of employees under a company scheme */
+  employees: Array<Employees>;
+  hello: Scalars['String']['output'];
+  /** Employer Profile */
+  profile: Profile;
+};
 
 export type LoginMutationVariables = Exact<{
-  input: LoginInput
-}>
+  username: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  user_type: LoginUserTypeInput;
+}>;
 
-export type LoginMutation = {
-  __typename?: 'Mutation'
-  login: {
-    __typename?: 'LoginResponse'
-    access_token: string
-    refresh_token: string
-    user: { __typename?: 'User'; id: string; email: string; role: string }
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'Login' }
+    & Pick<Login, 'accessToken'>
+  ) }
+);
+
+export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProfileQuery = (
+  { __typename?: 'Query' }
+  & { profile: (
+    { __typename?: 'Profile' }
+    & Pick<
+      Profile,
+      | 'company_name'
+      | 'email'
+      | 'pin_no'
+      | 'company_code'
+      | 'logo'
+    >
+  ) }
+);
+
+
+export const LoginDocument = gql`
+    mutation Login($username: String!, $password: String!, $user_type: LoginUserTypeInput!) {
+  login(username: $username, password: $password, user_type: $user_type) {
+    accessToken
   }
 }
-
-export type LogoutMutation = {
-  __typename?: 'Mutation'
-  logout: { __typename?: 'LogoutResponse'; success: boolean }
-}
-
-export type ResetPasswordMutationVariables = Exact<{
-  input: ResetPasswordInput
-}>
-
-export type ResetPasswordMutation = {
-  __typename?: 'Mutation'
-  resetPassword: {
-    __typename?: 'ResetPasswordResponse'
-    success: boolean
-    message: string
+    `;
+export const ProfileDocument = gql`
+    query Profile {
+  profile {
+    company_name
+    email
+    pin_no
+    company_code
+    logo
   }
 }
+    `;
 
-export type UpdatePasswordMutationVariables = Exact<{
-  input: UpdatePasswordInput
-}>
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string, variables?: any) => Promise<T>;
 
-export type UpdatePasswordMutation = {
-  __typename?: 'Mutation'
-  updatePassword: {
-    __typename?: 'UpdatePasswordResponse'
-    success: boolean
-    message: string
-  }
-}
 
-export type GetMemberProfileQuery = {
-  __typename?: 'Query'
-  memberProfile: {
-    __typename?: 'MemberProfile'
-    profile: {
-      __typename?: 'MemberProfileData'
-      member_no: string
-      first_name: string
-      last_name: string
-      email: string
-      phone: string
-      date_of_birth: string
-      address: string
-    }
-    status_code: number
-    message: string
-  }
-}
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType, _variables) => action();
 
-export const LoginDocument = `
-    mutation Login($input: LoginInput!) {
-  login(input: $input) {
-    access_token
-    refresh_token
-    user {
-      id
-      email
-      role
-    }
-  }
-}
-    `
-export const LogoutDocument = `
-    mutation Logout {
-  logout {
-    success
-  }
-}
-    `
-export const ResetPasswordDocument = `
-    mutation ResetPassword($input: ResetPasswordInput!) {
-  resetPassword(input: $input) {
-    success
-    message
-  }
-}
-    `
-export const UpdatePasswordDocument = `
-    mutation UpdatePassword($input: UpdatePasswordInput!) {
-  updatePassword(input: $input) {
-    success
-    message
-  }
-}
-    `
-export const GetMemberProfileDocument = `
-    query GetMemberProfile {
-  memberProfile {
-    profile {
-      member_no
-      first_name
-      last_name
-      email
-      phone
-      date_of_birth
-      address
-    }
-    status_code
-    message
-  }
-}
-    `
-
-export type SdkFunctionWrapper = <T>(
-  action: (requestHeaders?: Record<string, string>) => Promise<T>,
-  operationName: string,
-  operationType?: string,
-) => Promise<T>
-
-const defaultWrapper: SdkFunctionWrapper = (
-  action,
-  _operationName,
-  _operationType,
-) => action()
-
-export function getSdk(
-  client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper,
-) {
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    Login(
-      variables: LoginMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<LoginMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<LoginMutation>(LoginDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'Login',
-        'mutation',
-      )
+    Login(variables: LoginMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<LoginMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>({ document: LoginDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Login', 'mutation', variables);
     },
-    Logout(
-      variables?: Exact<{ [key: string]: never }> | undefined,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<LogoutMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<LogoutMutation>(LogoutDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'Logout',
-        'mutation',
-      )
-    },
-    ResetPassword(
-      variables: ResetPasswordMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<ResetPasswordMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<ResetPasswordMutation>(
-            ResetPasswordDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        'ResetPassword',
-        'mutation',
-      )
-    },
-    UpdatePassword(
-      variables: UpdatePasswordMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<UpdatePasswordMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<UpdatePasswordMutation>(
-            UpdatePasswordDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        'UpdatePassword',
-        'mutation',
-      )
-    },
-    GetMemberProfile(
-      variables?: Exact<{ [key: string]: never }> | undefined,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<GetMemberProfileQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetMemberProfileQuery>(
-            GetMemberProfileDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders },
-          ),
-        'GetMemberProfile',
-        'query',
-      )
-    },
-  }
+    Profile(variables?: ProfileQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<ProfileQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ProfileQuery>({ document: ProfileDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Profile', 'query', variables);
+    }
+  };
 }
-export type Sdk = ReturnType<typeof getSdk>
+export type Sdk = ReturnType<typeof getSdk>;
