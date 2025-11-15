@@ -1,9 +1,12 @@
 import { createServerFn } from '@tanstack/react-start'
 import { EmployerProfileService } from '../service/profile'
 import { authMiddleware } from '@/middleware/authMiddleware'
+import { csrfMiddleware } from '@/middleware/csrfMiddleware'
+import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware'
+
 
 export const EmployerProfileAction = createServerFn({ method: 'GET' })
-  .middleware([authMiddleware])
+  .middleware([authMiddleware, csrfMiddleware, rateLimitMiddleware])
   .handler(async ({ context }) => {
     try {
       const user = context
@@ -15,23 +18,6 @@ export const EmployerProfileAction = createServerFn({ method: 'GET' })
       }
 
       const profile = await EmployerProfileService(auth_token)
-
-      // user session data to be updated later
-      const member_no = profile.profile.member_no
-      if (member_no) {
-        // Note: Session updates might need to be handled differently with middleware
-        // For now, keeping similar logic; consider moving to middleware if needed
-        const session = await import('@/lib/session').then((m) =>
-          m.useAppSession(),
-        )
-        await session.update({
-          user: {
-            member_no,
-            email: user.user.email,
-            role: user.user.role,
-          },
-        })
-      }
 
       return {
         success: true,

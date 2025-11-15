@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { EmployerProfileAction } from '../action/profile'
-import type { EmployerProfile } from '../types/profile'
+// import type { EmployerProfile } from '../types/profile'
 
 const EMPLOYER_PROFILE_QUERY_KEY = ['employer', 'profile']
 
