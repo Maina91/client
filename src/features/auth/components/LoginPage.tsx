@@ -56,7 +56,7 @@ export function LoginPage() {
     defaultValues: {
       email_address: '',
       password: '',
-      user_type: 'MEMBER' as UserType,
+      user_type: 'member' as UserType,
     },
     validators: {
       onSubmit: loginSchema,
@@ -103,7 +103,7 @@ export function LoginPage() {
                       <Label htmlFor="member">Member</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="EMPLOYER" id="employer" />
+                      <RadioGroupItem value="employer" id="employer" />
                       <Label htmlFor="employer">Employer</Label>
                     </div>
                   </RadioGroup>

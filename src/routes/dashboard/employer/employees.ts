@@ -9,7 +9,7 @@ export const Route = createFileRoute('/dashboard/employer/employees')({
   beforeLoad: async ({ location }) => {
     const res = await getUSerSession()
 
-    if (!res.authenticated || res.user?.role !== 'EMPLOYER') {
+    if (!res.authenticated || res.user?.role !== 'employer') {
       await clearUserSession()
       throw redirect({
         to: '/dashboard',

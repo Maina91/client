@@ -21,12 +21,12 @@ export const Route = createFileRoute('/dashboard/')({
     const userRole: UserType = res.user.role
 
     switch (userRole) {
-      case 'MEMBER':
+      case 'member':
         throw redirect({
           to: '/dashboard/member',
           replace: true,
         })
-      case 'EMPLOYER':
+      case 'employer':
         throw redirect({
           to: '/dashboard/employer',
           replace: true,

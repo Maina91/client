@@ -8,7 +8,7 @@ export interface NavItem {
 }
 
 export const navConfig: Record<UserType, Array<NavItem>> = {
-  MEMBER: [
+  member: [
     { to: '/dashboard/member/', label: 'Dashboard', icon: Home },
     { to: '/dashboard/member/profile', label: 'Profile', icon: User },
     { to: '/dashboard/member/accounts', label: 'Accounts', icon: User },
@@ -18,7 +18,7 @@ export const navConfig: Record<UserType, Array<NavItem>> = {
       icon: User,
     },
   ],
-  EMPLOYER: [
+  employer: [
     { to: '/dashboard/employer/', label: 'Dashboard', icon: Home },
     { to: '/dashboard/employer/profile', label: 'Profile', icon: User },
     { to: '/dashboard/employer/employees', label: 'Employees', icon: User },
