@@ -17,6 +17,29 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Accounts = {
+  __typename?: 'Accounts';
+  account_no?: Maybe<Scalars['String']['output']>;
+  member_no?: Maybe<Scalars['String']['output']>;
+  security_code?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+};
+
+export type Contributions = {
+  __typename?: 'Contributions';
+  account_no?: Maybe<Scalars['String']['output']>;
+  amount?: Maybe<Scalars['String']['output']>;
+  employee_amount?: Maybe<Scalars['String']['output']>;
+  employee_units?: Maybe<Scalars['String']['output']>;
+  employer_amount?: Maybe<Scalars['String']['output']>;
+  employer_units?: Maybe<Scalars['String']['output']>;
+  member_no?: Maybe<Scalars['String']['output']>;
+  mop?: Maybe<Scalars['String']['output']>;
+  net_amount?: Maybe<Scalars['String']['output']>;
+  securoty_code?: Maybe<Scalars['String']['output']>;
+  trans_type?: Maybe<Scalars['String']['output']>;
+};
+
 export type Employees = {
   __typename?: 'Employees';
   all_names?: Maybe<Scalars['String']['output']>;
@@ -38,6 +61,18 @@ export enum LoginUserTypeInput {
   Employer = 'employer',
   Member = 'member'
 }
+
+export type MemberProfile = {
+  __typename?: 'MemberProfile';
+  all_names?: Maybe<Scalars['String']['output']>;
+  company_name?: Maybe<Scalars['String']['output']>;
+  e_mail?: Maybe<Scalars['String']['output']>;
+  first_name?: Maybe<Scalars['String']['output']>;
+  id_no?: Maybe<Scalars['String']['output']>;
+  last_name?: Maybe<Scalars['String']['output']>;
+  member_no?: Maybe<Scalars['String']['output']>;
+  pin_no?: Maybe<Scalars['String']['output']>;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -63,11 +98,23 @@ export type Profile = {
 
 export type Query = {
   __typename?: 'Query';
+  /** List member accounts */
+  accounts: Array<Accounts>;
+  /** List member contributions */
+  contributions: Array<Contributions>;
   /** List of employees under a company scheme */
   employees: Array<Employees>;
   hello: Scalars['String']['output'];
+  /** Member Profile */
+  memberProfile: MemberProfile;
   /** Employer Profile */
   profile: Profile;
+};
+
+
+export type QueryContributionsArgs = {
+  account_no?: InputMaybe<Scalars['String']['input']>;
+  member_no: Scalars['String']['input'];
 };
 
 export type LoginMutationVariables = Exact<{

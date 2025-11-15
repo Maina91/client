@@ -6,8 +6,7 @@ import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
 import { loginSchema } from '../schema/auth.schema'
 import { loginAction } from '../action/auth'
-import type { LoginData } from '../types/auth'
-import type { LoginUserTypeInput } from "@/generated/graphql"
+import type { UserType } from '../schema/auth.schema'
 import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -57,7 +56,7 @@ export function LoginPage() {
     defaultValues: {
       username: '',
       password: '',
-      user_type: 'member' as LoginUserTypeInput,
+      user_type: 'member' as UserType,
     },
     validators: {
       onSubmit: loginSchema,

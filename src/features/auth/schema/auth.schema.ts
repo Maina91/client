@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
-
 import { LoginUserTypeInput } from "@/generated/graphql"
+
+export type UserType = LoginUserTypeInput
 
 export const loginSchema = z.object({
   username: z

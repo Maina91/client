@@ -1,9 +1,9 @@
-import type { LoginUserTypeInput } from "@/generated/graphql"
+import type { UserType } from '../schema/auth.schema'
 
 export interface LoginData {
   username: string
   password: string
-  user_type: LoginUserTypeInput
+  user_type: UserType
 }
 
 // export interface ResetPasswordData {
