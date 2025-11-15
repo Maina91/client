@@ -1,19 +1,7 @@
+import type { MemberProfileResponse } from '../types/memberProfile'
 import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
 
-export interface MemberProfileResponse {
-  profile: {
-    member_no: string
-    first_name: string
-    last_name: string
-    email: string
-    phone: string
-    date_of_birth: string
-    address: string
-  }
-  status_code: number
-  message: string
-}
 
 export async function MemberProfileService(
   token: string,
