@@ -7,7 +7,7 @@ import { SESSION_EXPIRY_SEC } from '@/lib/config/envConfig';
 import { generateCsrfToken } from '@/lib/generateCsrf';
 import { csrfMiddleware } from '@/middleware/csrfMiddleware';
 import { authMiddleware } from '@/middleware/authMiddleware';
-import { authRateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
+import { authRateLimitMiddleware, rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 
 export const loginAction = createServerFn({ method: 'POST' })
@@ -56,6 +56,32 @@ export const loginAction = createServerFn({ method: 'POST' })
       throw {
         message: err?.message ?? 'Login failed',
         fieldErrors: err?.fieldErrors ?? null,
+      }
+    }
+  })
+
+
+export const logoutAction = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware, csrfMiddleware, rateLimitMiddleware])
+  .handler(async ({ context }) => {
+    try {
+      const user = context
+      const auth_token = user.authToken
+
+      if (!auth_token) {
+        throw new Response('Missing auth token', { status: 401 })
+      }
+
+      return {
+        success: true,
+        message: 'Logged out successfully',
+      }
+    } catch (err: any) {
+      const session = await useAppSession()
+      await session.clear()
+
+      throw {
+        message: err?.message ?? 'Logged out successfully',
       }
     }
   })

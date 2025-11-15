@@ -25,8 +25,8 @@ export function Topbar({ onSidebarToggle }: TopbarProps) {
       return logoutAction()
     },
     onSuccess: (res) => {
-      toast.success(res.message ?? 'Logged out successfully')
-      localStorage.clear() // or use your session clear util
+      toast.success(res.message)
+      // or use your session clear util
       router.navigate({ to: '/login' })
     },
     onError: () => {
