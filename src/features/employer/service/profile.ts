@@ -1,19 +1,6 @@
+import type { EmployerProfileResponse } from '../types/profile'
 import { getSdk } from '@/generated/graphql'
 import { getGraphQLClient, handleGraphQLError } from '@/lib/graphql-client'
-
-export interface EmployerProfileResponse {
-  profile: {
-    member_no: string
-    first_name: string
-    last_name: string
-    email: string
-    phone: string
-    date_of_birth: string
-    address: string
-  }
-  status_code: number
-  message: string
-}
 
 export async function EmployerProfileService(
   token: string,
@@ -24,13 +11,25 @@ export async function EmployerProfileService(
     const client = getGraphQLClient(token)
     const sdk = getSdk(client)
 
+    // Using GetMemberProfile as placeholder until Profile query is generated
     const response = await sdk.GetMemberProfile()
 
-    // if (!response.employerProfile) {
-    //   throw new Error('Unable to fetch employer profile')
+    // return {
+    //   status_code: response.memberProfile.status_code,
+    //   success: true,
+    //   profile: {
+    //     company_name: 'Placeholder Company',
+    //     email: 'placeholder@company.com',
+    //     pin_no: '123456789',
+    //     company_code: 'COMP001',
+    //     logo: undefined,
+    //   },
     // }
-
-    return response.memberProfile
+    return {
+      status_code: 200,
+      success: true,
+      profile: response.profile,
+    }
   } catch (error) {
     handleGraphQLError(error)
     throw error

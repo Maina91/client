@@ -1,14 +1,9 @@
 export interface EmployerProfile {
-  member_no: string
-  full_name: string
-  first_name: string
-  last_name: string
-  email_address: string
-  mobile_no: string
-  user_type: 'MEMBER' | 'EMPLOYER'
-  profileProgress?: any
-  customer_ref?: string
-  [key: string]: any
+  company_name: string
+  email: string
+  pin_no: string
+  company_code: string
+  logo?: string
 }
 
 export interface EmployerProfileResponse {
