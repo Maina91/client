@@ -130,7 +130,9 @@ export function LoginPage() {
             >
               {(field) => (
                 <div className="space-y-1.5">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="username">
+                    Email, Username or ID number
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}
